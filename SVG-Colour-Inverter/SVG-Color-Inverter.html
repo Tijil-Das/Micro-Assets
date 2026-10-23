@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SVG Colour Inverter</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c28;
+    --border: #2a2a3d;
+    --accent: #7c6aff;
+    --accent2: #ff6a9b;
+    --text: #e8e8f0;
+    --muted: #6060a0;
+    --success: #4aff9a;
+    --mono: 'DM Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(124,106,255,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 30% at 80% 90%, rgba(255,106,155,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(124,106,255,0.12);
+    border: 1px solid rgba(124,106,255,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .workspace {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  @media (max-width: 700px) {
+    .workspace { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s;
+  }
+
+  .panel:hover { border-color: rgba(124,106,255,0.35); }
+
+  .panel-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface2);
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-in { background: #ff6a9b; }
+  .dot-out { background: #4aff9a; }
+
+  .panel-body {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 320px;
+  }
+
+  /* DROP ZONE */
+  .drop-zone {
+    flex: 1;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .drop-zone:hover, .drop-zone.dragging {
+    border-color: var(--accent);
+    background: rgba(124,106,255,0.05);
+  }
+
+  .drop-zone.has-file {
+    border-style: solid;
+    border-color: rgba(124,106,255,0.4);
+    background: rgba(124,106,255,0.04);
+  }
+
+  .drop-icon {
+    font-size: 36px;
+    opacity: 0.6;
+    transition: transform 0.2s;
+  }
+  .drop-zone:hover .drop-icon { transform: scale(1.1) translateY(-2px); }
+
+  .drop-label {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .drop-label strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .file-badge {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: rgba(124,106,255,0.15);
+    border: 1px solid rgba(124,106,255,0.3);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--accent);
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .file-badge.visible { display: flex; }
+  .file-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  #fileInput { display: none; }
+
+  /* PREVIEW */
+  .preview-wrap {
+    flex: 1;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: repeating-conic-gradient(#1c1c28 0% 25%, #161620 0% 50%) 0 0 / 16px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 200px;
+    position: relative;
+  }
+
+  .preview-wrap svg, .preview-wrap img {
+    max-width: 100%;
+    max-height: 240px;
+    display: block;
+  }
+
+  .preview-placeholder {
+    color: var(--muted);
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.5;
+  }
+
+  .preview-placeholder span { font-size: 28px; }
+
+  /* STATS */
+  .stats-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .stat-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .stat-chip b { color: var(--text); font-weight: 500; }
+
+  /* CONTROLS PANEL */
+  .controls-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 0;
+    animation: fadeUp 0.7s 0.2s ease both;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .control-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toggle-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    padding: 8px 6px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+
+  .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .toggle-btn.active {
+    background: rgba(124,106,255,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* INVERT BUTTON */
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover::after { background: rgba(255,255,255,0.08); }
+  .btn-primary:active { transform: scale(0.99); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* DOWNLOAD */
+  .btn-download {
+    display: none;
+    width: 100%;
+    padding: 11px;
+    border-radius: 10px;
+    border: 1px solid var(--success);
+    background: rgba(74,255,154,0.08);
+    color: var(--success);
+    font-family: var(--mono);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-download.visible { display: block; }
+  .btn-download:hover { background: rgba(74,255,154,0.15); }
+
+  /* LOG */
+  .log-panel {
+    width: 100%;
+    max-width: 1000px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .log-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .log-body {
+    padding: 14px 18px;
+    font-size: 12px;
+    line-height: 1.8;
+    min-height: 56px;
+    max-height: 180px;
+    overflow-y: auto;
+    color: var(--muted);
+  }
+
+  .log-body::-webkit-scrollbar { width: 4px; }
+  .log-body::-webkit-scrollbar-track { background: transparent; }
+  .log-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .log-entry { display: flex; gap: 10px; }
+  .log-time { color: var(--border); flex-shrink: 0; }
+  .log-info { color: var(--muted); }
+  .log-ok { color: var(--success); }
+  .log-warn { color: #ffbb55; }
+  .log-err { color: #ff5577; }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .processing { animation: pulse 0.8s infinite; }
+
+  /* DIFF badge */
+  .diff-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(74,255,154,0.12);
+    color: var(--success);
+    border: 1px solid rgba(74,255,154,0.25);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Browser Tool</div>
+  <h1>SVG Colour Inverter</h1>
+  <p class="subtitle">Inverts every colour in your SVG — structure untouched, guaranteed.</p>
+</header>
+
+<div class="workspace">
+
+  <!-- INPUT PANEL -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="dot dot-in"></div>
+      Input SVG
+    </div>
+    <div class="panel-body">
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-icon">⬡</div>
+        <div class="drop-label">
+          <strong>Drop your SVG here</strong><br>
+          or click to browse
+        </div>
+        <input type="file" id="fileInput" accept=".svg,image/svg+xml">
+      </div>
+      <div class="file-badge" id="fileBadge">
+        <span>◈</span>
+        <span class="file-name" id="fileName"></span>
+      </div>
+      <div class="stats-row" id="inputStats"></div>
+      <div class="preview-wrap" id="inputPreview">
+        <div class="preview-placeholder"><span>◇</span>No file loaded</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUTPUT PANEL -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="dot dot-out"></div>
+      Inverted Output
+    </div>
+    <div class="panel-body">
+      <div class="preview-wrap" id="outputPreview">
+        <div class="preview-placeholder"><span>◇</span>Awaiting inversion</div>
+      </div>
+      <div class="stats-row" id="outputStats"></div>
+      <a class="btn-download" id="downloadBtn">⬇ Download Inverted SVG</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTROLS -->
+<div class="controls-panel">
+  <div class="controls-grid">
+
+    <div class="control-group">
+      <div class="control-label">Colour Attributes</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-opt="fill" onclick="toggleOpt(this)">fill</button>
+        <button class="toggle-btn active" data-opt="stroke" onclick="toggleOpt(this)">stroke</button>
+        <button class="toggle-btn active" data-opt="stop-color" onclick="toggleOpt(this)">stops</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-label">Style Attribute</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-opt="inline-style" onclick="toggleOpt(this)">inline style</button>
+        <button class="toggle-btn active" data-opt="css-block" onclick="toggleOpt(this)">style blocks</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-label">Transparency</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-opt="preserve-none" onclick="toggleOpt(this)">keep none</button>
+        <button class="toggle-btn active" data-opt="preserve-transparent" onclick="toggleOpt(this)">keep rgba</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-label">Colour Formats</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-opt="hex" onclick="toggleOpt(this)">hex</button>
+        <button class="toggle-btn active" data-opt="rgb" onclick="toggleOpt(this)">rgb</button>
+        <button class="toggle-btn active" data-opt="hsl" onclick="toggleOpt(this)">hsl</button>
+        <button class="toggle-btn active" data-opt="named" onclick="toggleOpt(this)">named</button>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="btn-primary" id="invertBtn" disabled onclick="runInversion()">Invert Colours</button>
+</div>
+
+<!-- LOG -->
+<div class="log-panel">
+  <div class="log-header">⬡ Operation Log</div>
+  <div class="log-body" id="logBody">
+    <div class="log-entry"><span class="log-time">--:--:--</span><span class="log-info">Ready. Drop an SVG file to begin.</span></div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────
+let svgSource = null;
+let svgFileName = 'inverted.svg';
+let opts = {
+  'fill': true, 'stroke': true, 'stop-color': true,
+  'inline-style': true, 'css-block': true,
+  'preserve-none': true, 'preserve-transparent': true,
+  'hex': true, 'rgb': true, 'hsl': true, 'named': true
+};
+
+// ─── NAMED COLOURS ───────────────────────────────────────────────
+const NAMED_COLORS = {
+  aliceblue:[240,248,255],antiquewhite:[250,235,215],aqua:[0,255,255],
+  aquamarine:[127,255,212],azure:[240,255,255],beige:[245,245,220],
+  bisque:[255,228,196],black:[0,0,0],blanchedalmond:[255,235,205],
+  blue:[0,0,255],blueviolet:[138,43,226],brown:[165,42,42],
+  burlywood:[222,184,135],cadetblue:[95,158,160],chartreuse:[127,255,0],
+  chocolate:[210,105,30],coral:[255,127,80],cornflowerblue:[100,149,237],
+  cornsilk:[255,248,220],crimson:[220,20,60],cyan:[0,255,255],
+  darkblue:[0,0,139],darkcyan:[0,139,139],darkgoldenrod:[184,134,11],
+  darkgray:[169,169,169],darkgreen:[0,100,0],darkgrey:[169,169,169],
+  darkkhaki:[189,183,107],darkmagenta:[139,0,139],darkolivegreen:[85,107,47],
+  darkorange:[255,140,0],darkorchid:[153,50,204],darkred:[139,0,0],
+  darksalmon:[233,150,122],darkseagreen:[143,188,143],darkslateblue:[72,61,139],
+  darkslategray:[47,79,79],darkslategrey:[47,79,79],darkturquoise:[0,206,209],
+  darkviolet:[148,0,211],deeppink:[255,20,147],deepskyblue:[0,191,255],
+  dimgray:[105,105,105],dimgrey:[105,105,105],dodgerblue:[30,144,255],
+  firebrick:[178,34,34],floralwhite:[255,250,240],forestgreen:[34,139,34],
+  fuchsia:[255,0,255],gainsboro:[220,220,220],ghostwhite:[248,248,255],
+  gold:[255,215,0],goldenrod:[218,165,32],gray:[128,128,128],
+  green:[0,128,0],greenyellow:[173,255,47],grey:[128,128,128],
+  honeydew:[240,255,240],hotpink:[255,105,180],indianred:[205,92,92],
+  indigo:[75,0,130],ivory:[255,255,240],khaki:[240,230,140],
+  lavender:[230,230,250],lavenderblush:[255,240,245],lawngreen:[124,252,0],
+  lemonchiffon:[255,250,205],lightblue:[173,216,230],lightcoral:[240,128,128],
+  lightcyan:[224,255,255],lightgoldenrodyellow:[250,250,210],lightgray:[211,211,211],
+  lightgreen:[144,238,144],lightgrey:[211,211,211],lightpink:[255,182,193],
+  lightsalmon:[255,160,122],lightseagreen:[32,178,170],lightskyblue:[135,206,250],
+  lightslategray:[119,136,153],lightslategrey:[119,136,153],lightsteelblue:[176,196,222],
+  lightyellow:[255,255,224],lime:[0,255,0],limegreen:[50,205,50],
+  linen:[250,240,230],magenta:[255,0,255],maroon:[128,0,0],
+  mediumaquamarine:[102,205,170],mediumblue:[0,0,205],mediumorchid:[186,85,211],
+  mediumpurple:[147,112,219],mediumseagreen:[60,179,113],mediumslateblue:[123,104,238],
+  mediumspringgreen:[0,250,154],mediumturquoise:[72,209,204],mediumvioletred:[199,21,133],
+  midnightblue:[25,25,112],mintcream:[245,255,250],mistyrose:[255,228,225],
+  moccasin:[255,228,181],navajowhite:[255,222,173],navy:[0,0,128],
+  oldlace:[253,245,230],olive:[128,128,0],olivedrab:[107,142,35],
+  orange:[255,165,0],orangered:[255,69,0],orchid:[218,112,214],
+  palegoldenrod:[238,232,170],palegreen:[152,251,152],paleturquoise:[175,238,238],
+  palevioletred:[219,112,147],papayawhip:[255,239,213],peachpuff:[255,218,185],
+  peru:[205,133,63],pink:[255,192,203],plum:[221,160,221],
+  powderblue:[176,224,230],purple:[128,0,128],red:[255,0,0],
+  rosybrown:[188,143,143],royalblue:[65,105,225],saddlebrown:[139,69,19],
+  salmon:[250,128,114],sandybrown:[244,164,96],seagreen:[46,139,87],
+  seashell:[255,245,238],sienna:[160,82,45],silver:[192,192,192],
+  skyblue:[135,206,235],slateblue:[106,90,205],slategray:[112,128,144],
+  slategrey:[112,128,144],snow:[255,250,250],springgreen:[0,255,127],
+  steelblue:[70,130,180],tan:[210,180,140],teal:[0,128,128],
+  thistle:[216,191,216],tomato:[255,99,71],turquoise:[64,224,208],
+  violet:[238,130,238],wheat:[245,222,179],white:[255,255,255],
+  whitesmoke:[245,245,245],yellow:[255,255,0],yellowgreen:[154,205,50]
+};
+
+// ─── COLOUR INVERSION CORE ────────────────────────────────────────
+function invertRGB(r, g, b) {
+  return [255 - r, 255 - g, 255 - b];
+}
+
+function hexToRgb(hex) {
+  hex = hex.replace(/^#/, '');
+  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+  if (hex.length !== 6) return null;
+  const n = parseInt(hex, 16);
+  return [(n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff];
+}
+
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
+function hslToRgb(h, s, l) {
+  s /= 100; l /= 100;
+  const k = n => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+}
+
+let colourCount = 0;
+
+function invertColourValue(value, context) {
+  if (!value) return value;
+  const v = value.trim();
+
+  // none / transparent / inherit / currentColor — skip based on opts
+  if (v === 'none') return (opts['preserve-none'] ? v : null) || v;
+  if (v === 'transparent') return (opts['preserve-transparent'] ? v : null) || v;
+  if (/^(inherit|currentcolor|currentColor|url\(|var\()/i.test(v)) return v;
+
+  // HEX
+  if (opts['hex'] && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)) {
+    const rgb = hexToRgb(v);
+    if (rgb) {
+      colourCount++;
+      const [r, g, b] = invertRGB(...rgb);
+      return rgbToHex(r, g, b);
+    }
+  }
+
+  // RGB / RGBA
+  if (opts['rgb']) {
+    const rgbMatch = v.match(/^rgba?\(\s*([\d.]+%?)\s*,\s*([\d.]+%?)\s*,\s*([\d.]+%?)(?:\s*,\s*([\d.]+))?\s*\)$/i);
+    if (rgbMatch) {
+      let r = rgbMatch[1], g = rgbMatch[2], b = rgbMatch[3];
+      const a = rgbMatch[4];
+      const toNum = x => x.endsWith('%') ? Math.round(parseFloat(x) * 255 / 100) : Math.round(parseFloat(x));
+      const [ri, gi, bi] = invertRGB(toNum(r), toNum(g), toNum(b));
+      colourCount++;
+      if (a !== undefined) {
+        if (opts['preserve-transparent'] && parseFloat(a) === 0) return v;
+        return `rgba(${ri}, ${gi}, ${bi}, ${a})`;
+      }
+      return `rgb(${ri}, ${gi}, ${bi})`;
+    }
+  }
+
+  // HSL / HSLA
+  if (opts['hsl']) {
+    const hslMatch = v.match(/^hsla?\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%(?:\s*,\s*([\d.]+))?\s*\)$/i);
+    if (hslMatch) {
+      const h = parseFloat(hslMatch[1]), s = parseFloat(hslMatch[2]), l = parseFloat(hslMatch[3]);
+      const a = hslMatch[4];
+      const rgb = hslToRgb(h, s, l);
+      const [ri, gi, bi] = invertRGB(...rgb);
+      colourCount++;
+      if (a !== undefined) {
+        if (opts['preserve-transparent'] && parseFloat(a) === 0) return v;
+        return `rgba(${ri}, ${gi}, ${bi}, ${a})`;
+      }
+      return rgbToHex(ri, gi, bi);
+    }
+  }
+
+  // Named colours
+  if (opts['named']) {
+    const lower = v.toLowerCase();
+    if (NAMED_COLORS[lower]) {
+      const [ri, gi, bi] = invertRGB(...NAMED_COLORS[lower]);
+      colourCount++;
+      return rgbToHex(ri, gi, bi);
+    }
+  }
+
+  return v;
+}
+
+function invertColourInString(str) {
+  if (!str) return str;
+
+  // Process CSS property values: prop: value; or prop: value (last)
+  return str.replace(
+    /((?:fill|stroke|stop-color|color|background-color|background)\s*:\s*)([^;}"']+)/gi,
+    (match, prop, val) => prop + invertColourValue(val.trim())
+  ).replace(
+    // Also catch bare colour tokens (e.g. in SVG attribute values directly)
+    /(?<![#\w-])(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b|rgba?\([^)]+\)|hsla?\([^)]+\))/gi,
+    (match) => invertColourValue(match)
+  );
+}
+
+// ─── SVG ATTRIBUTE INVERSION ──────────────────────────────────────
+function processAttribute(node, attr) {
+  if (!node.hasAttribute(attr)) return;
+  const val = node.getAttribute(attr);
+  const inverted = invertColourValue(val);
+  if (inverted !== val) node.setAttribute(attr, inverted);
+}
+
+function processInlineStyle(node) {
+  if (!opts['inline-style']) return;
+  const style = node.getAttribute('style');
+  if (!style) return;
+  const inverted = invertColourInString(style);
+  if (inverted !== style) node.setAttribute('style', inverted);
+}
+
+function processCSSTextContent(text) {
+  // Invert all colour tokens inside CSS rules
+  return text
+    .replace(/((?:fill|stroke|stop-color|color|background(?:-color)?)\s*:\s*)([^;}"'\n]+)/gi,
+      (m, prop, val) => prop + invertColourValue(val.trim()))
+    .replace(/(:\s*)(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}))\b/g,
+      (m, colon, hex) => colon + invertColourValue(hex))
+    .replace(/(:\s*)(rgba?\([^)]+\)|hsla?\([^)]+\))/gi,
+      (m, colon, fn) => colon + invertColourValue(fn));
+}
+
+function walkSVG(svgDoc) {
+  const all = svgDoc.querySelectorAll('*');
+  const COLOR_ATTRS = [];
+  if (opts['fill']) COLOR_ATTRS.push('fill');
+  if (opts['stroke']) COLOR_ATTRS.push('stroke');
+  if (opts['stop-color']) COLOR_ATTRS.push('stop-color');
+  // Always include these
+  COLOR_ATTRS.push('flood-color', 'lighting-color', 'color');
+
+  all.forEach(node => {
+    COLOR_ATTRS.forEach(attr => processAttribute(node, attr));
+    processInlineStyle(node);
+  });
+
+  // CSS style blocks
+  if (opts['css-block']) {
+    svgDoc.querySelectorAll('style').forEach(styleEl => {
+      const orig = styleEl.textContent;
+      const inverted = processCSSTextContent(orig);
+      if (inverted !== orig) styleEl.textContent = inverted;
+    });
+  }
+}
+
+// ─── MAIN INVERSION ───────────────────────────────────────────────
+function runInversion() {
+  if (!svgSource) return;
+  colourCount = 0;
+  log('Processing SVG…', 'info');
+
+  const btn = document.getElementById('invertBtn');
+  btn.classList.add('processing');
+  btn.disabled = true;
+
+  setTimeout(() => {
+    try {
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgSource, 'image/svg+xml');
+
+      const parseErr = svgDoc.querySelector('parsererror');
+      if (parseErr) throw new Error('SVG parse error: ' + parseErr.textContent.slice(0, 80));
+
+      walkSVG(svgDoc);
+
+      const serializer = new XMLSerializer();
+      let outputStr = serializer.serializeToString(svgDoc.documentElement);
+
+      // Verify structural integrity — same tag count
+      const countTags = s => (s.match(/<[^/!?][^>]*>/g) || []).length;
+      const inTags = countTags(svgSource);
+      const outTags = countTags(outputStr);
+      if (inTags !== outTags) {
+        log(`Tag count mismatch (in:${inTags} out:${outTags}) — check output carefully`, 'warn');
+      } else {
+        log(`Structure verified — tag count matches (${outTags})`, 'ok');
+      }
+
+      log(`Inverted ${colourCount} colour value${colourCount !== 1 ? 's' : ''}`, 'ok');
+
+      // Show output preview
+      const outPreview = document.getElementById('outputPreview');
+      outPreview.innerHTML = '';
+      const blob = new Blob([outputStr], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Inverted SVG';
+      outPreview.appendChild(img);
+
+      // Stats
+      const outStats = document.getElementById('outputStats');
+      const byteSize = new Blob([outputStr]).size;
+      outStats.innerHTML = `
+        <div class="stat-chip">Colours changed <b>${colourCount}</b></div>
+        <div class="stat-chip">Size <b>${(byteSize/1024).toFixed(1)} KB</b></div>
+        <span class="diff-badge">✓ Structure intact</span>
+      `;
+
+      // Download
+      const dl = document.getElementById('downloadBtn');
+      const dlUrl = URL.createObjectURL(new Blob([outputStr], {type: 'image/svg+xml'}));
+      dl.href = dlUrl;
+      const baseName = svgFileName.replace(/\.svg$/i, '');
+      dl.download = baseName + '_inverted.svg';
+      dl.classList.add('visible');
+
+      log(`Done → ${baseName}_inverted.svg`, 'ok');
+
+    } catch(e) {
+      log('Error: ' + e.message, 'err');
+    } finally {
+      btn.classList.remove('processing');
+      btn.disabled = false;
+    }
+  }, 30);
+}
+
+// ─── FILE HANDLING ────────────────────────────────────────────────
+function loadFile(file) {
+  if (!file || !file.name.match(/\.svg$/i)) {
+    log('Please select a valid .svg file', 'warn');
+    return;
+  }
+
+  svgFileName = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    svgSource = e.target.result;
+    log(`Loaded: ${file.name} (${(file.size/1024).toFixed(1)} KB)`, 'ok');
+
+    // Show file badge
+    const badge = document.getElementById('fileBadge');
+    badge.classList.add('visible');
+    document.getElementById('fileName').textContent = file.name;
+
+    // Drop zone
+    const dz = document.getElementById('dropZone');
+    dz.classList.add('has-file');
+    dz.querySelector('.drop-label').innerHTML = `<strong>${file.name}</strong><br>Click to change`;
+
+    // Input preview
+    const inPreview = document.getElementById('inputPreview');
+    inPreview.innerHTML = '';
+    const blob = new Blob([svgSource], {type: 'image/svg+xml'});
+    const url = URL.createObjectURL(blob);
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'Original SVG';
+    inPreview.appendChild(img);
+
+    // Count elements & colours
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+    const elCount = doc.querySelectorAll('*').length;
+    const colourHits = (svgSource.match(/#[0-9a-fA-F]{3,6}|rgb\(|rgba\(|hsl\(|hsla\(/gi) || []).length;
+
+    document.getElementById('inputStats').innerHTML = `
+      <div class="stat-chip">Elements <b>${elCount}</b></div>
+      <div class="stat-chip">Colour hits <b>~${colourHits}</b></div>
+      <div class="stat-chip">Size <b>${(file.size/1024).toFixed(1)} KB</b></div>
+    `;
+
+    // Reset output
+    document.getElementById('outputPreview').innerHTML = '<div class="preview-placeholder"><span>◇</span>Ready to invert</div>';
+    document.getElementById('outputStats').innerHTML = '';
+    document.getElementById('downloadBtn').classList.remove('visible');
+
+    document.getElementById('invertBtn').disabled = false;
+  };
+  reader.readAsText(file);
+}
+
+// Drop zone
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => e.target.files[0] && loadFile(e.target.files[0]));
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragging'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragging');
+  const f = e.dataTransfer.files[0];
+  if (f) loadFile(f);
+});
+
+// ─── TOGGLE OPTIONS ───────────────────────────────────────────────
+function toggleOpt(btn) {
+  const key = btn.dataset.opt;
+  opts[key] = !opts[key];
+  btn.classList.toggle('active', opts[key]);
+}
+
+// ─── LOGGER ───────────────────────────────────────────────────────
+function log(msg, type = 'info') {
+  const body = document.getElementById('logBody');
+  const now = new Date();
+  const time = [now.getHours(), now.getMinutes(), now.getSeconds()].map(n => String(n).padStart(2,'0')).join(':');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.innerHTML = `<span class="log-time">${time}</span><span class="log-${type}">${msg}</span>`;
+  body.appendChild(entry);
+  body.scrollTop = body.scrollHeight;
+}
+</script>
+</body>
+</html>

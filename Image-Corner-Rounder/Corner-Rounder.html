@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corner Rounder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,500;1,300&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e10;
+    --surface: #18181c;
+    --surface2: #222228;
+    --border: #2e2e38;
+    --accent: #c8f55a;
+    --accent-dim: #8aaa2e;
+    --text: #f0f0f0;
+    --muted: #6e6e80;
+    --radius: 14px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(200,245,90,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 85% 80%, rgba(200,245,90,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    width: 100%;
+    max-width: 940px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    margin-bottom: 48px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  h1 span {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* Drop Zone */
+  .drop-zone {
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 52px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .drop-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(200,245,90,0.04);
+  }
+
+  .drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .drop-icon {
+    font-size: 38px;
+    margin-bottom: 14px;
+    display: block;
+    filter: grayscale(0.3);
+  }
+
+  .drop-zone h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 1.3rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .drop-zone p {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Controls */
+  .controls {
+    margin: 32px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .control-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .slider-wrap {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(200,245,90,0.15);
+    transition: box-shadow 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 8px rgba(200,245,90,0.2);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+  }
+
+  .radius-value {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--accent);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.18s;
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .btn:hover { border-color: var(--muted); background: var(--border); }
+
+  .btn.primary {
+    background: var(--accent);
+    color: #0e0e10;
+    border-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .btn.primary:hover { background: #d6ff6a; border-color: #d6ff6a; }
+
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, transform 0.2s;
+    animation: cardIn 0.35s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .card:hover { border-color: var(--accent-dim); transform: translateY(-2px); }
+
+  .card-preview {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: repeating-conic-gradient(#222228 0% 25%, #1a1a20 0% 50%) 0 0 / 20px 20px;
+    position: relative;
+  }
+
+  .card-preview canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .card-info {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-name {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+
+  .btn-dl {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    background: var(--surface2);
+    color: var(--accent);
+    transition: all 0.18s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .btn-dl:hover { background: rgba(200,245,90,0.1); border-color: var(--accent-dim); }
+
+  .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+
+  .remove-btn:hover { background: #3a0000; border-color: #ff4444; color: #ff4444; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+
+  .empty-state .big { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 300; color: var(--border); display: block; margin-bottom: 8px; }
+
+  .hidden { display: none !important; }
+
+  /* Preset pills */
+  .presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .preset-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    padding: 5px 12px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .preset-pill:hover, .preset-pill.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,245,90,0.07);
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div>
+      <h1>Corner <span>Rounder</span></h1>
+      <p class="tagline">Round image corners in your browser — no upload, no server</p>
+    </div>
+  </header>
+
+  <!-- Drop zone -->
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept="image/*" multiple>
+    <span class="drop-icon">🖼️</span>
+    <h2>Drop images here</h2>
+    <p>or click to browse — PNG, JPG, WEBP, GIF supported</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls" id="controls">
+    <span class="control-label">Radius</span>
+    <div class="slider-wrap">
+      <input type="range" id="radiusSlider" min="0" max="50" value="16" step="1">
+      <span class="radius-value" id="radiusVal">16%</span>
+    </div>
+    <div class="presets">
+      <span class="control-label" style="margin-right:4px;">Presets:</span>
+      <button class="preset-pill" data-v="0">None</button>
+      <button class="preset-pill" data-v="8">Soft</button>
+      <button class="preset-pill active" data-v="16">Round</button>
+      <button class="preset-pill" data-v="30">Puffy</button>
+      <button class="preset-pill" data-v="50">Circle</button>
+    </div>
+    <div class="btn-group">
+      <button class="btn primary" id="dlAllBtn" disabled>↓ Download All</button>
+      <button class="btn" id="clearBtn">Clear</button>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div id="grid" class="grid">
+    <div class="empty-state" id="emptyState">
+      <span class="big">∅</span>
+      Upload images above to get started
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const slider = document.getElementById('radiusSlider');
+  const radiusVal = document.getElementById('radiusVal');
+  const grid = document.getElementById('grid');
+  const emptyState = document.getElementById('emptyState');
+  const dlAllBtn = document.getElementById('dlAllBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const presetPills = document.querySelectorAll('.preset-pill');
+
+  let images = []; // { id, name, img }
+  let radiusPct = 16;
+  let idCounter = 0;
+
+  // Drag & drop
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+  fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+  function handleFiles(files) {
+    [...files].forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const id = ++idCounter;
+          images.push({ id, name: file.name, img });
+          addCard(id, file.name, img);
+          updateUI();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+    fileInput.value = '';
+  }
+
+  function roundedCanvas(img, pct) {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    const r = Math.min(canvas.width, canvas.height) * (pct / 100);
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    ctx.beginPath();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(w - r, 0);
+    ctx.quadraticCurveTo(w, 0, w, r);
+    ctx.lineTo(w, h - r);
+    ctx.quadraticCurveTo(w, h, w - r, h);
+    ctx.lineTo(r, h);
+    ctx.quadraticCurveTo(0, h, 0, h - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(img, 0, 0);
+    return canvas;
+  }
+
+  function addCard(id, name, img) {
+    emptyState.remove();
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.id = id;
+
+    const preview = document.createElement('div');
+    preview.className = 'card-preview';
+
+    const canvas = roundedCanvas(img, radiusPct);
+    canvas.dataset.id = id;
+    preview.appendChild(canvas);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-btn';
+    removeBtn.innerHTML = '×';
+    removeBtn.title = 'Remove';
+    removeBtn.onclick = () => removeCard(id);
+    preview.appendChild(removeBtn);
+
+    const info = document.createElement('div');
+    info.className = 'card-info';
+
+    const nameEl = document.createElement('span');
+    nameEl.className = 'card-name';
+    nameEl.textContent = name;
+    nameEl.title = name;
+
+    const dlBtn = document.createElement('button');
+    dlBtn.className = 'btn-dl';
+    dlBtn.textContent = '↓ Save';
+    dlBtn.onclick = () => downloadCanvas(canvas, name);
+
+    info.appendChild(nameEl);
+    info.appendChild(dlBtn);
+    card.appendChild(preview);
+    card.appendChild(info);
+    grid.appendChild(card);
+  }
+
+  function removeCard(id) {
+    images = images.filter(i => i.id !== id);
+    const card = grid.querySelector(`.card[data-id="${id}"]`);
+    if (card) card.remove();
+    updateUI();
+  }
+
+  function updateAllCanvases() {
+    images.forEach(({ id, img }) => {
+      const canvas = grid.querySelector(`canvas[data-id="${id}"]`);
+      if (!canvas) return;
+      const fresh = roundedCanvas(img, radiusPct);
+      canvas.width = fresh.width;
+      canvas.height = fresh.height;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, fresh.width, fresh.height);
+      ctx.drawImage(fresh, 0, 0);
+    });
+  }
+
+  function updateUI() {
+    if (images.length === 0) {
+      if (!document.getElementById('emptyState')) {
+        const es = document.createElement('div');
+        es.className = 'empty-state';
+        es.id = 'emptyState';
+        es.innerHTML = '<span class="big">∅</span>Upload images above to get started';
+        grid.appendChild(es);
+      }
+      dlAllBtn.disabled = true;
+    } else {
+      dlAllBtn.disabled = false;
+    }
+  }
+
+  // Convert canvas to a Blob
+  function canvasToBlob(canvas) {
+    return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+  }
+
+  // Save with native file picker (File System Access API)
+  // Falls back to classic <a> download if not supported
+  async function downloadCanvas(canvas, name) {
+    const base = name.replace(/\.[^.]+$/, '');
+    const fileName = `${base}-rounded.png`;
+
+    if ('showSaveFilePicker' in window) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: fileName,
+          types: [{ description: 'PNG Image', accept: { 'image/png': ['.png'] } }],
+        });
+        const blob = await canvasToBlob(canvas);
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        return;
+      } catch (err) {
+        // User cancelled the dialog — do nothing
+        if (err.name === 'AbortError') return;
+        // Any other error: fall through to legacy method
+      }
+    }
+
+    // Legacy fallback
+    const blob = await canvasToBlob(canvas);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = fileName;
+    link.href = url;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+
+  // Slider
+  slider.addEventListener('input', () => {
+    radiusPct = parseInt(slider.value);
+    radiusVal.textContent = `${radiusPct}%`;
+    presetPills.forEach(p => p.classList.toggle('active', parseInt(p.dataset.v) === radiusPct));
+    updateAllCanvases();
+  });
+
+  // Presets
+  presetPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const v = parseInt(pill.dataset.v);
+      slider.value = v;
+      radiusPct = v;
+      radiusVal.textContent = `${v}%`;
+      presetPills.forEach(p => p.classList.toggle('active', p === pill));
+      updateAllCanvases();
+    });
+  });
+
+  // Download all — sequential so each picker dialog resolves before opening next
+  dlAllBtn.addEventListener('click', async () => {
+    for (const { id, name } of images) {
+      const canvas = grid.querySelector(`canvas[data-id="${id}"]`);
+      if (canvas) await downloadCanvas(canvas, name);
+    }
+  });
+
+  // Clear
+  clearBtn.addEventListener('click', () => {
+    images = [];
+    grid.innerHTML = '';
+    updateUI();
+  });
+</script>
+</body>
+</html>
