@@ -1,6 +1,6 @@
-# Dev Learnings
+﻿# Dev Learnings
 
-> *"An expert is someone who has made all the mistakes in a narrow field."* — Niels Bohr
+> *"An expert is someone who has made all the mistakes in a narrow field."* â€” Niels Bohr
 
 A problem solved without writing it down is a problem I'll solve again.
 Every entry here has two lives: what I actually learned, and how I'd articulate it to someone who wasn't there.
@@ -14,18 +14,18 @@ Every entry here has two lives: what I actually learned, and how I'd articulate 
 2. Create a new file: `learnings/[domain]/concept-slug.md`
 3. Open [`RULES.md`](RULES.md) and copy the frontmatter + section template exactly. Fill it all in.
 4. Add a row to [`INDEX.md`](INDEX.md) in the same commit.
-5. If `portfolio-worthy: yes` — write the case study version in `portfolio/case-studies/`.
+5. If `portfolio-worthy: yes` â€” write the case study version in `portfolio/case-studies/`.
 
 ### Adding a mistake
 Same flow, but under `mistakes/[domain]/`. Lead `## The Problem` with what I did wrong first.
-Mistakes are honest. Write what it cost — time, credibility, sleep.
+Mistakes are honest. Write what it cost â€” time, credibility, sleep.
 
 ### Adding a pattern or snippet
-Drop it in `patterns/snippets/` or `patterns/templates/`. Must work standalone — no "see README for setup."
+Drop it in `patterns/snippets/` or `patterns/templates/`. Must work standalone â€” no "see README for setup."
 
 ### Monthly
-- Update `meta/goals.md` — still moving toward them?
-- Write `meta/retrospectives/YYYY-MM.md` — what worked, what didn't, honest rating.
+- Update `meta/goals.md` â€” still moving toward them?
+- Write `meta/retrospectives/YYYY-MM.md` â€” what worked, what didn't, honest rating.
 
 ---
 
@@ -33,40 +33,40 @@ Drop it in `patterns/snippets/` or `patterns/templates/`. Must work standalone �
 
 ```
 Dev Learnings/
-│
-├── START-HERE.md             ← This file. Start here.
-├── RULES.md                  ← Entry template + all rules. Read before adding anything.
-├── INDEX.md                  ← Living index of every entry. Updated on every commit.
-│
-├── learnings/                ← One concept, one file. Organized by domain.
-│   ├── auth/
-│   ├── frontend/
-│   ├── backend/
-│   ├── architecture/
-│   ├── databases/
-│   ├── security/
-│   ├── devops/
-│   ├── ai/
-│   └── tools/
-│
-├── mistakes/                 ← Separate from learnings. Honest post-mortems.
-│   └── (mirrors learnings/ structure)
-│
-├── patterns/
-│   ├── snippets/             ← Drop-in, self-contained code pieces.
-│   └── templates/            ← Full working file templates.
-│
-├── projects/                 ← Per-project architecture, decisions, and evolution.
-│   └── CircuitIQ/
-│
-├── portfolio/
-│   ├── case-studies/         ← Written for an external reader. No assumed context.
-│   └── writeups/             ← Blog-ready technical posts.
-│
-└── meta/
-    ├── goals.md              ← Career direction. Review monthly.
-    ├── reading-list.md       ← What to consume next.
-    └── retrospectives/       ← Monthly. Named YYYY-MM.md.
+â”‚
+â”œâ”€â”€ START-HERE.md             â† This file. Start here.
+â”œâ”€â”€ RULES.md                  â† Entry template + all rules. Read before adding anything.
+â”œâ”€â”€ INDEX.md                  â† Living index of every entry. Updated on every commit.
+â”‚
+â”œâ”€â”€ learnings/                â† One concept, one file. Organized by domain.
+â”‚   â”œâ”€â”€ auth/
+â”‚   â”œâ”€â”€ frontend/
+â”‚   â”œâ”€â”€ backend/
+â”‚   â”œâ”€â”€ architecture/
+â”‚   â”œâ”€â”€ databases/
+â”‚   â”œâ”€â”€ security/
+â”‚   â”œâ”€â”€ devops/
+â”‚   â”œâ”€â”€ ai/
+â”‚   â””â”€â”€ tools/
+â”‚
+â”œâ”€â”€ mistakes/                 â† Separate from learnings. Honest post-mortems.
+â”‚   â””â”€â”€ (mirrors learnings/ structure)
+â”‚
+â”œâ”€â”€ patterns/
+â”‚   â”œâ”€â”€ snippets/             â† Drop-in, self-contained code pieces.
+â”‚   â””â”€â”€ templates/            â† Full working file templates.
+â”‚
+â”œâ”€â”€ projects/                 â† Per-project architecture, decisions, and evolution.
+â”‚   â””â”€â”€ CircuitIQ/
+â”‚
+â”œâ”€â”€ portfolio/
+â”‚   â”œâ”€â”€ case-studies/         â† Written for an external reader. No assumed context.
+â”‚   â””â”€â”€ writeups/             â† Blog-ready technical posts.
+â”‚
+â””â”€â”€ meta/
+    â”œâ”€â”€ goals.md              â† Career direction. Review monthly.
+    â”œâ”€â”€ reading-list.md       â† What to consume next.
+    â””â”€â”€ retrospectives/       â† Monthly. Named YYYY-MM.md.
 ```
 
 ---
@@ -85,4 +85,4 @@ Dev Learnings/
 
 ---
 
-*Last updated: 2026-07-20*
+*Last updated: 2026-11-01*
