@@ -1,6 +1,6 @@
 # 📦 Micro-Assets
 
-> A curated collection of lightweight micro-tools, single-file browser utilities, terminal scripts, and personal developer learnings.
+> A curated collection of lightweight micro-tools, single-file browser utilities, terminal scripts, native desktop addons, robotics projects, and personal developer learnings.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-success.svg)](#)
@@ -11,7 +11,7 @@
 
 ## 🎯 Overview
 
-**Micro-Assets** brings together focused, zero-bloat utilities designed to do one job cleanly, reliably, and with maximum privacy. The browser tools run entirely on client-side Web APIs (no server tracking, no network calls, no telemetry), the terminal scripts run natively without third-party runtimes, and the dev knowledge base documents real-world architectural learnings and patterns.
+**Micro-Assets** brings together focused, zero-bloat utilities designed to do one job cleanly, reliably, and with maximum privacy. The browser tools run entirely on client-side Web APIs (no server tracking, no network calls, no telemetry), the terminal scripts run natively without third-party runtimes, the native desktop addons bridge specialized OS-level capabilities into Electron, the hardware exhibitions demonstrate embedded robotics and circuit designs, and the dev knowledge base documents real-world architectural learnings and patterns.
 
 ---
 
@@ -23,6 +23,8 @@
 | [**`SVG-Colour-Inverter/`**](./SVG-Colour-Inverter) | Web Tool | Invert all colours in any SVG with guaranteed zero structural DOM mutations and live comparison preview. | HTML5, DOMParser, XMLSerializer |
 | [**`Image-Corner-Rounder/`**](./Image-Corner-Rounder) | Web Tool | Real-time image corner rounding and clipping with multi-image support, live preview, and PNG export. | HTML5, Canvas API |
 | [**`Check-Max-File-Size/`**](./Check-Max-File-Size) | CLI Utility | Recursive Windows batch script to scan any folder and pinpoint the largest file and exact byte size. | Windows CMD / Batch |
+| [**`Electron-Win11-Snap-Overlay/`**](./Electron-Win11-Snap-Overlay) | NPM Package / Native Addon | Native Windows 11 Snap Layout flyout overlay for frameless Electron apps with custom HTML title bars. | C++20, Win32, Node-API (N-API), TypeScript, Electron, React |
+| [**`CS-Exhibition/`**](./CS-Exhibition) | Robotics & Hardware | Standalone Arduino robotics projects (Obstacle Avoidance Robot, Traffic Light System) with diagrams, schematics, and sketches. | Arduino (C++), HC-SR04, L298N, SG90 Servo, LEDs |
 | [**`My-Dev-Learnings/`**](./My-Dev-Learnings) | Knowledge Base | Structured engineering journal covering real-world mistakes, authentication traps, and patterns. | Markdown, Knowledge Base |
 
 ---
@@ -53,9 +55,34 @@
   ```
   Enter the path to scan when prompted.
 
-### 5. 🧠 [My Dev Learnings](./My-Dev-Learnings)
+### 5. 🪟 [Electron Win11 Snap Overlay](./Electron-Win11-Snap-Overlay)
+- **Path:** [`Electron-Win11-Snap-Overlay/`](./Electron-Win11-Snap-Overlay)
+- **NPM Package:** [`electron-win11-snap-overlay`](https://www.npmjs.com/package/electron-win11-snap-overlay)
+- **GitHub Repository:** [`Tijil-Das/Electron-Win11-Snap-Overlay`](https://github.com/Tijil-Das/Electron-Win11-Snap-Overlay)
+- **What it does:** Solves the long-standing Electron issue where frameless windows (`titleBarStyle: 'hidden'`) break Windows 11 Snap Layout flyouts because HTML caption buttons never receive OS non-client hit tests. Creates a transparent child HWND over the maximize button that returns `HTMAXBUTTON` on `WM_NCHITTEST` and forwards `WM_NCMOUSEMOVE` to DWM, seamlessly activating native snap layouts while gracefully degrading on Windows 10, macOS, and Linux.
+- **How to install & run:**
+  ```bash
+  npm install electron-win11-snap-overlay
+  ```
+  ```ts
+  import { BrowserWindow } from 'electron'
+  import { SnapController } from 'electron-win11-snap-overlay'
+
+  const win = new BrowserWindow({ titleBarStyle: 'hidden' })
+  SnapController.getOrCreate(win)
+  ```
+
+### 6. 🤖 [CS Exhibition — Robotics & Embedded Systems](./CS-Exhibition)
+- **Path:** [`CS-Exhibition/README.md`](./CS-Exhibition/README.md)
+- **What it does:** Complete, exhibition-grade robotics and embedded systems projects developed under the CISCE & IIT Delhi (IHFC) Teachers Readiness Programme.
+  - **Obstacle Avoidance Robot:** Autonomous wheeled robot powered by an Arduino Uno R3, HC-SR04 ultrasonic sensor, SG90 servo scanning neck, and L298N dual H-bridge motor driver with forward clearance detection and dynamic turn logic.
+  - **Traffic Light System:** Real-world three-phase traffic controller simulation (Red, Yellow, Green) with realistic state intervals.
+- **What's included:** Full step-by-step documentation (`Content.md`), upload-ready Arduino sketches (`.ino`), and high-resolution wiring schematics (`Wiring.png`).
+- **How to explore:** Start in [`CS-Exhibition/README.md`](./CS-Exhibition/README.md) or open sketches directly in the Arduino IDE.
+
+### 7. 🧠 [My Dev Learnings](./My-Dev-Learnings)
 - **Path:** [`My-Dev-Learnings/README.md`](./My-Dev-Learnings/README.md)
-- **What it does:** A personal engineering repository documenting solutions, debugging steps, and architecture decisions encountered across projects (OAuth sign-in, COM object memory leaks, etc.).
+- **What it does:** A personal engineering repository documenting solutions, debugging steps, and architecture decisions encountered across projects (Win11 snap layouts, OAuth sign-in, COM object memory leaks, etc.).
 - **How to explore:** Start at [`My-Dev-Learnings/START-HERE.md`](./My-Dev-Learnings/START-HERE.md) or scan [`My-Dev-Learnings/INDEX.md`](./My-Dev-Learnings/INDEX.md).
 
 ---

@@ -13,7 +13,7 @@ Each entry is a concept I had to figure out the hard way. It documents the probl
 | Domain | What it covers |
 |---|---|
 | `auth` | OAuth, JWT, sessions, SSO, identity |
-| `frontend` | HTML, CSS, JS, frameworks, UI patterns |
+| `frontend` | HTML, CSS, JS, frameworks, UI patterns, Win32 / desktop integrations |
 | `backend` | APIs, serverless, workers, desktop automation |
 | `architecture` | System design, service boundaries, data flow |
 | `databases` | Schema design, queries, migrations, performance |
@@ -28,9 +28,10 @@ Each entry is a concept I had to figure out the hard way. It documents the probl
 
 | Metric | Count |
 |---|---|
-| Total Learnings | 2 |
-| Portfolio-Worthy | 2 |
+| Total Learnings | 3 |
+| Portfolio-Worthy | 3 |
 | Mistakes Documented | 0 |
+| Documented Projects | 3 |
 
 ---
 

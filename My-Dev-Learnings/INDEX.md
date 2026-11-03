@@ -1,4 +1,4 @@
-﻿# Index â€” All Entries at a Glance
+# Index — All Entries at a Glance
 
 > Hand-maintained. Updated on every commit. The single source of truth for what exists in this library.
 
@@ -9,7 +9,7 @@
 ### Auth
 | File | Title | Date | Project | Difficulty | Portfolio-Worthy |
 |---|---|---|---|---|---|
-| [google-id-token-signin.md](learnings/auth/google-id-token-signin.md) | Using Google ID Token Sign-In with Supabase | 2026-07-20 | CircuitIQ | Intermediate | âœ… Yes |
+| [google-id-token-signin.md](learnings/auth/google-id-token-signin.md) | Using Google ID Token Sign-In with Supabase | 2026-07-20 | CircuitIQ | Intermediate | ✅ Yes |
 
 ### Frontend
 | File | Title | Date | Project | Difficulty | Portfolio-Worthy |
@@ -19,7 +19,7 @@
 ### Backend
 | File | Title | Date | Project | Difficulty | Portfolio-Worthy |
 |---|---|---|---|---|---|
-| [office-to-pdf-com-cloudflare-pipeline.md](learnings/backend/office-to-pdf-com-cloudflare-pipeline.md) | Converting .docx / .pptx to PDF via Silent COM Automation with a Cloudflare Worker Cloud Fallback | 2026-07-25 | Orbit | Advanced | âœ… Yes |
+| [office-to-pdf-com-cloudflare-pipeline.md](learnings/backend/office-to-pdf-com-cloudflare-pipeline.md) | Converting .docx / .pptx to PDF via Silent COM Automation with a Cloudflare Worker Cloud Fallback | 2026-07-25 | Orbit | Advanced | ✅ Yes |
 
 ### Architecture
 *No entries yet.*
@@ -43,7 +43,7 @@
 
 ## Mistakes
 
-*No entries yet. Document your first mistake here â€” they compound into wisdom.*
+*No entries yet. Document your first mistake here — they compound into wisdom.*
 
 ---
 
@@ -70,12 +70,19 @@
 ## Projects
 
 ### CircuitIQ
-*Documentation coming.*
+| File | Description |
+|---|---|
+| [overview.md](projects/CircuitIQ/overview.md) | Architecture, key decisions, and learnings index for CircuitIQ |
 
 ### Orbit
 | File | Description |
 |---|---|
 | [overview.md](projects/Orbit/overview.md) | Architecture, key decisions, and learnings index for Orbit |
+
+### JioTV Max (Windows)
+| File | Description |
+|---|---|
+| [overview.md](projects/JioTV-Max/overview.md) | Architecture, Win32 Snap Overlay solution, and NPM package extraction |
 
 ---
 
@@ -87,7 +94,8 @@
 | Total Mistakes | 0 |
 | Portfolio-Worthy Entries | 3 |
 | Patterns Documented | 0 |
+| Documented Projects | 3 |
 
 ---
 
-*Last updated: 2026-11-01*
+*Last updated: 2026-11-03*
