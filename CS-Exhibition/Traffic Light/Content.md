@@ -6,7 +6,7 @@
 - **Instructors:**  
   - Dr. Venkat Bokka, IHFC ([venkat@ihfc.co.in](mailto:venkat@ihfc.co.in))  
   - Ms. Mrinmoyee Choudhuri, IHFC ([mrinmoyee@ihfc.co.in](mailto:mrinmoyee@ihfc.co.in))  
-- **Source Code Sketch:** [`Traffic Light Code.ino`](./Traffic%20Light%20Code.ino)  
+- **Source Code Sketch:** [`Arduino Code.ino`](./Arduino%20Code.ino)  
 - **Circuit Diagram:** [`Wiring.png`](./Wiring.png)  
 
 ---
@@ -15,7 +15,7 @@
 1. [Objective](#1-objective)
 2. [Materials Required](#2-materials-required)
 3. [Procedure](#3-procedure)
-   - [3.1 Connecting the LEDs](#31-connecting-the-leds)
+   - [3.1 Connecting the LED](#31-connecting-the-led)
    - [3.2 Program the Arduino](#32-program-the-arduino)
 4. [Circuit Assembly & Wiring Diagram](#4-circuit-assembly--wiring-diagram)
 5. [Logic of a Traffic Light System](#5-logic-of-a-traffic-light-system)
@@ -32,55 +32,47 @@ In this project, we will create a simple traffic light system using an Arduino b
 
 ## 2. Materials Required
 
-| # | Component | Description |
-|---|---|---|
-| 1 | **Arduino Uno R3** | The microcontroller that will process the sensor data and control the lighting sequence. |
-| 2 | **LEDs (3 Colors)** | Light Emitting Diodes that blink/glow; requires 3 different colors: **Red**, **Yellow**, and **Green**. |
-| 3 | **$220\,\Omega$ Resistors** | Current-limiting resistors (one for each LED cathode to protect against overcurrent). |
-| 4 | **Jumper Wires** | Used to make connections between components (Female-to-Male and Male-to-Male jumpers required). |
-| 5 | **Breadboard** | Prototyping board allowing quick, solderless connections between LEDs, resistors, and jumpers. |
+- **Arduino Uno R3:** The microcontroller that will process the sensor data.
+- **LED:** Light Emitting Diode that will blink, we require 3 different types Red, Yellow, Green.
+- **Resistor:** 220 ohm resistor for each LED cathode.
+- **Jumper Wires:** Used to make connections between components, Female to Male jumpers are require.
 
 ---
 
 ## 3. Procedure
 
-### 3.1 Connecting the LEDs
-- **Anode (+) of the Red LED:** Connect the long leg (anode) of the Red LED to **Digital Pin 4** on the Arduino.
-- **Anode (+) of the Yellow LED:** Connect the long leg (anode) of the Yellow LED to **Digital Pin 3** on the Arduino.
-- **Anode (+) of the Green LED:** Connect the long leg (anode) of the Green LED to **Digital Pin 2** on the Arduino.
-- **Cathode ($-$) of the LEDs:** Connect the short leg (cathode) of each LED to a **$220\,\Omega$ resistor**, then connect the other end of the resistor to the ground (**GND**) on the Arduino board.
+### 3.1 Connecting the LED
+- **Anode (+) of the Red LED:** Connect the long leg (anode) of the Red LED to digital pin 4.
+- **Anode (+) of the Yellow LED:** Connect the long leg (anode) of the Yellow LED to digital pin 3.
+- **Anode (+) of the Green LED:** Connect the long leg (anode) of the Green LED to digital pin 2.
+- **Cathode (-) of the LED:** Connect the short leg (cathode) of each LED to a 220 ohm resistor, then connect the other end of the resistor to the ground (GND) on the Arduino board.
 
 ### 3.2 Program the Arduino
-1. Download and install the Arduino IDE from the official [Arduino Website](https://www.arduino.cc/en/software).
-2. Connect your Arduino Uno R3 to your computer using a USB cable.
-3. Open the Arduino IDE and select the correct board and port by navigating to:
-   - `Tools > Board > Arduino AVR Boards > Arduino Uno`
-   - `Tools > Port >` *(Select your Arduino's active COM port)*
-4. Open a new sketch by navigating to `File > New`.
-5. Write or paste the code into the Arduino IDE editor.
-6. Click the **Verify** button ($\checkmark$ icon) to compile the code and check for errors.
-7. Once the code compiles successfully, click the **Upload** button ($\rightarrow$ icon) to upload the code to the Arduino board.
+- Download and install the Arduino IDE from the official Arduino website.
+- Connect your Arduino Uno R3 to your computer using a USB cable.
+- Open the Arduino IDE and select the correct board and port by navigating to `Tools > Board > Arduino Uno` and `Tools > Port > (Select your Arduino's port)`.
+- Open a new sketch by navigating to `File > New`.
+- Write the following code into the Arduino IDE:
+- Click the Verify button / $\checkmark$ icon to compile the code and check for errors.
+- Once the code compiles successfully, click the Upload button (right arrow icon) to upload the code to the Arduino board.
 
 ---
 
 ## 4. Circuit Assembly & Wiring Diagram
 
-The circuit connects three colored LEDs through current-limiting resistors to individual digital output pins and a common ground.
+The circuit connects three colored LEDs through 220 ohm current-limiting resistors to Arduino digital pins 4, 3, 2, and ground.
 
 [![Traffic Light Wiring Diagram](./Wiring.png)](./Wiring.png)
 
-> **Image Link:** Click [here to open `Wiring.png`](./Wiring.png) directly in full resolution.
+> **Direct Link:** [Open `Wiring.png` in full resolution](./Wiring.png)
 
-### Wiring Interconnection Table
+### Wiring Connection Summary
 
-| Component | Terminal / Leg | Arduino Uno Pin | Function / State Variable |
+| LED Color | Anode (+) Pin | Cathode (-) Connection | Variable Name |
 |---|---|---|---|
-| **Red LED** | Long Leg (Anode $+$) | **Digital Pin 4** | Controlled by `redLedPin` |
-| | Short Leg (Cathode $-$) | $220\,\Omega$ Resistor $\rightarrow$ **GND** | Current return path |
-| **Yellow LED** | Long Leg (Anode $+$) | **Digital Pin 3** | Controlled by `yellowLedPin` |
-| | Short Leg (Cathode $-$) | $220\,\Omega$ Resistor $\rightarrow$ **GND** | Current return path |
-| **Green LED** | Long Leg (Anode $+$) | **Digital Pin 2** | Controlled by `greenLedPin` |
-| | Short Leg (Cathode $-$) | $220\,\Omega$ Resistor $\rightarrow$ **GND** | Current return path |
+| **Red** | Digital Pin 4 | 220 ohm resistor $\rightarrow$ GND | `redLedPin` |
+| **Yellow** | Digital Pin 3 | 220 ohm resistor $\rightarrow$ GND | `yellowLedPin` |
+| **Green** | Digital Pin 2 | 220 ohm resistor $\rightarrow$ GND | `greenLedPin` |
 
 ---
 
@@ -89,35 +81,35 @@ The circuit connects three colored LEDs through current-limiting resistors to in
 ```mermaid
 stateDiagram-v2
     direction LR
-    [*] --> Red_Phase: Power On
+    [*] --> Red_Light: Start
     
-    state "🔴 RED LIGHT (Stop)\n• Red LED: HIGH\n• Yellow LED: LOW\n• Green LED: LOW\n• Duration: 5000 ms" as Red_Phase
-    state "🟡 YELLOW LIGHT (Prepare)\n• Red LED: LOW\n• Yellow LED: HIGH\n• Green LED: LOW\n• Duration: 2000 ms" as Yellow_Phase
-    state "🟢 GREEN LIGHT (Go)\n• Red LED: LOW\n• Yellow LED: LOW\n• Green LED: HIGH\n• Duration: 5000 ms" as Green_Phase
+    state "🔴 Red Light (Stop)\n• Red LED ON\n• Yellow & Green OFF\n• Duration: 5000 ms" as Red_Light
+    state "🟡 Yellow Light (Prepare)\n• Yellow LED ON\n• Red & Green OFF\n• Duration: 2000 ms" as Yellow_Light
+    state "🟢 Green Light (Go)\n• Green LED ON\n• Red & Yellow OFF\n• Duration: 5000 ms" as Green_Light
 
-    Red_Phase --> Yellow_Phase: After 5 seconds
-    Yellow_Phase --> Green_Phase: After 2 seconds
-    Green_Phase --> Red_Phase: After 5 seconds (Repeat)
+    Red_Light --> Yellow_Light: After 5 seconds
+    Yellow_Light --> Green_Light: After 2 seconds
+    Green_Light --> Red_Light: After 5 seconds (Loop)
 ```
 
 - **Red Light (Stop):**
-  - Turn on Red LED, turn off Yellow and Green LEDs.
-  - Maintain for a fixed duration ($5\,\text{seconds}$).
+  - Turn on red LED, turn off yellow and green LEDs.
+  - Maintain for fixed duration (e.g., 5 seconds).
 - **Yellow Light (Prepare to Stop or Start):**
-  - Turn on Yellow LED, turn off Red and Green LEDs.
-  - Maintain for a fixed duration ($2\,\text{seconds}$).
+  - Turn on yellow LED, turn off red and green LEDs.
+  - Maintain for fixed duration (e.g., 2 seconds).
 - **Green Light (Go):**
-  - Turn on Green LED, turn off Red and Yellow LEDs.
-  - Maintain for a fixed duration ($5\,\text{seconds}$).
+  - Turn on green LED, turn off red and yellow LEDs.
+  - Maintain for fixed duration (e.g., 5 seconds).
 - **Transition between States:**
   - After each state, transition to the next state in sequence.
-  - Repeat sequence continuously in the `loop()` function to simulate real traffic light operation.
+  - Repeat sequence continuously to simulate real traffic light operation.
 
 ---
 
 ## 6. Arduino Code
 
-The standalone sketch file is available at [`Traffic Light Code.ino`](./Traffic%20Light%20Code.ino).
+The code below matches the original worksheet verbatim. The standalone sketch file is available at [`Arduino Code.ino`](./Arduino%20Code.ino).
 
 ```cpp
 // Define LED pins
