@@ -4,7 +4,19 @@
 > Council for the Indian School Certificate Examinations (CISCE) & Technology Innovation Hub of IIT Delhi (IHFC)  
 > Session: June 2024  
 
-This directory contains standalone robotics and embedded systems projects developed for exhibition and educational demonstrations. Each project includes complete circuit wiring diagrams, step-by-step assembly guides, operating logic, and upload-ready Arduino sketches.
+---
+
+## 📖 Background & Overview
+
+This project was built for my school's **Computer Science Exhibition** during my **12th Standard**. Our team was assigned the topic of building an **Obstacle Avoidance Car (Autonomous Robot)**.
+
+The initiative was part of the *Teachers Readiness Programme on Robotics and AI*, organized jointly by the **Council for the Indian School Certificate Examinations (CISCE)** and the **Technology Innovation Hub of IIT Delhi (IHFC)**, guided by Dr. Venkat Bokka and Ms. Mrinmoyee Choudhuri.
+
+The exhibition highlighted hands-on embedded computing and autonomous robotics:
+- **Obstacle Avoidance Car:** An autonomous robot using an Arduino Uno R3, an HC-SR04 ultrasonic distance sensor mounted on an SG90 servo motor for active environment scanning, and an L298N dual H-bridge motor driver to steer DC geared motors around detected obstacles in real-time.
+- **Traffic Light System:** A complementary embedded demonstration showcasing sequential state timing, LED current regulation, and automated signal cycling.
+
+This folder archives the full project worksheets, step-by-step assembly guides, visual wiring diagrams, and verbatim Arduino sketch source code.
 
 ---
 
