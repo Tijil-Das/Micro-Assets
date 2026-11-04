@@ -311,10 +311,10 @@ const assetRegistry = [
   },
   {
     id: "flowchart",
-    file: "Assets/.flowchart.png",
-    downloadName: "Flowchart.png",
+    file: "Assets/.flowchart.html",
+    downloadName: "Flowchart.html",
     displayName: "Navigation flowchart",
-    type: "PNG diagram",
+    type: "HTML diagram",
     isInternal: false
   },
   {
@@ -400,8 +400,10 @@ function viewAsset(assetId) {
   body.innerHTML = `<div style="text-align: center; padding: 48px; color: var(--muted);">Loading content...</div>`;
   modal.classList.add('open');
 
-  if (asset.id === 'wiring' || asset.id === 'flowchart') {
+  if (asset.id === 'wiring') {
     renderImageAsset(asset, body);
+  } else if (asset.id === 'flowchart') {
+    renderHtmlAsset(asset, body);
   } else if (asset.id === 'code') {
     renderCodeAsset(asset, body);
   } else if (asset.id === 'partlist') {
@@ -413,6 +415,23 @@ function viewAsset(assetId) {
   } else if (asset.id === 'handout') {
     renderHandoutAsset(asset, body);
   }
+}
+
+function renderHtmlAsset(asset, container) {
+  container.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; color: var(--muted); font-family: var(--font-mono);">${asset.downloadName}</span>
+        <a href="${asset.file}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span>Open in new tab</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+      <div style="width: 100%; height: 68vh; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; background: #0b0f17;">
+        <iframe src="${asset.file}" title="${asset.displayName}" style="width: 100%; height: 100%; border: none; display: block;" loading="lazy"></iframe>
+      </div>
+    </div>
+  `;
 }
 
 function renderImageAsset(asset, container) {
