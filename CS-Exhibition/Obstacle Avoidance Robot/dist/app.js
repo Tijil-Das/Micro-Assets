@@ -343,10 +343,10 @@ const assetRegistry = [
   },
   {
     id: "handout",
-    file: "Assets/Takeaway Handlet.docx",
-    downloadName: "Takeaway Handlet.docx",
+    file: "Assets/Takeaway Handlet.pdf",
+    downloadName: "Takeaway Handlet.pdf",
     displayName: "Visitor takeaway handout",
-    type: "Word document",
+    type: "PDF document",
     isInternal: true
   }
 ];
@@ -1057,34 +1057,16 @@ window.nextSlide = function() {
 
 function renderHandoutAsset(asset, container) {
   container.innerHTML = `
-    <div style="background: var(--bg-subtle); border: 1px solid var(--border-strong); border-radius: 8px; padding: 24px; line-height: 1.6;">
-      <div style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 20px;">
-        <span style="font-size: 12px; color: var(--muted); text-transform: uppercase; font-family: var(--font-mono);">Exhibition handout</span>
-        <h3 style="font-size: 18px; color: var(--fg); font-weight: 600; margin-top: 4px;">Obstacle Avoidance Car</h3>
-        <p style="font-size: 13px; color: var(--muted);">Class 12 Science, St. Aloysius School</p>
+    <div style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+        <span style="font-size: 13px; color: var(--muted); font-family: var(--font-mono);">${asset.downloadName} (Internal docs)</span>
+        <a href="${asset.file}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span>Open PDF in new tab</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
       </div>
-
-      <h4 style="font-size: 14px; color: var(--fg); font-weight: 600; margin-bottom: 8px;">Working principles</h4>
-      <ul style="list-style: none; padding-left: 0; margin-bottom: 24px; font-size: 14px; color: var(--fg-2);">
-        <li style="margin-bottom: 6px;">• Power: a 9V battery runs the Arduino and the motors.</li>
-        <li style="margin-bottom: 6px;">• Ping: the sensor sends a silent 40 kHz pulse.</li>
-        <li style="margin-bottom: 6px;">• Echo: the pulse bounces back, and the Arduino times it: distance = (time × speed of sound) / 2.</li>
-        <li style="margin-bottom: 6px;">• Clear (over 15 cm): both motors drive forward.</li>
-        <li style="margin-bottom: 6px;">• Obstacle (under 10 cm): stop, scan right and left, reverse, turn left, then drive on and repeat.</li>
-      </ul>
-
-      <h4 style="font-size: 14px; color: var(--fg); font-weight: 600; margin-bottom: 8px;">Think about them</h4>
-      <ol style="padding-left: 20px; font-size: 14px; color: var(--fg-2); margin-bottom: 20px;">
-        <li style="margin-bottom: 6px;">On a hot day, will the car misjudge a 50 cm obstacle as nearer or farther?</li>
-        <li style="margin-bottom: 6px;">The car reverses with no rear sensor. What could go wrong?</li>
-        <li style="margin-bottom: 6px;">Why is "turn for 500 ms" an unreliable way to turn a fixed angle?</li>
-        <li style="margin-bottom: 6px;">What happens if you add two more sensors and fire them together?</li>
-        <li style="margin-bottom: 6px;">Why does the code check distance > 0 as well as < 10?</li>
-        <li style="margin-bottom: 6px;">Why might the car miss an obstacle only 1 cm away?</li>
-      </ol>
-
-      <div style="border-top: 1px solid var(--border); padding-top: 12px; font-size: 12px; color: var(--muted);">
-        Takeaway Handlet.docx (Internal docs)
+      <div style="width: 100%; height: 74vh; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; background: #121212;">
+        <iframe src="${asset.file}" title="${asset.displayName}" style="width: 100%; height: 100%; border: none; display: block;"></iframe>
       </div>
     </div>
   `;
