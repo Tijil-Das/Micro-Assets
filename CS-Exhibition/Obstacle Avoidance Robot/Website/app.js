@@ -1097,7 +1097,7 @@ function renderHandoutAsset(asset, container) {
 /* -------------------------------------------------------------------
    6. VISITOR FEEDBACK SYSTEM (Indexed & Connected to CF Worker)
    ------------------------------------------------------------------- */
-const FEEDBACK_CONFIG = {
+const FEEDBACK_CONFIG = window.ROBOT_CONFIG || {
   // Cloudflare Worker URL endpoint
   workerUrl: "https://obstacle-car-feedback-worker.tijil.workers.dev",
   // Passcode expected by the Cloudflare Worker bearer check

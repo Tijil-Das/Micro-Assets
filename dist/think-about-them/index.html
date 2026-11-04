@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Think about them — Obstacle Avoidance Car</title>
+  <meta name="description" content="Six questions exploring acoustics, thermodynamics, sensor blind zones, and robotics edge cases for the Obstacle Avoidance Car.">
+  <link rel="icon" type="image/png" href="../icon/favicon.png">
+  <link rel="apple-touch-icon" href="../icon/favicon.png">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <!-- Sticky top bar -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="../index.html" class="brand" aria-label="Obstacle Avoidance Car">
+        <span class="brand-dot"></span>
+        <span>Obstacle Avoidance Car</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../index.html#hero" class="nav-link">Home</a></li>
+          <li><a href="../index.html#demo" class="nav-link">Demo</a></li>
+          <li><a href="../index.html#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="../index.html#working" class="nav-link">How it works</a></li>
+          <li><a href="#think-about-them" class="nav-link active">Think about them</a></li>
+          <li><a href="../index.html#assets" class="nav-link">Assets</a></li>
+          <li><a href="../feedback/index.html" class="nav-link">Feedback</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="../index.html" class="btn btn-secondary btn-sm">Back to project</a>
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="think-about-them" style="padding-top: 64px;">
+      <div class="container">
+        <div class="section-header section-header-center">
+          <div style="margin-bottom: 16px;">
+            <a href="../index.html" style="font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px;">
+              Back to main showcase
+            </a>
+          </div>
+          <h1 class="section-title">Think about them</h1>
+          <p class="section-description">
+            Six foundational questions exploring acoustic thermodynamics, sensor blind zones, power degradation, and multi-sensor interference.
+          </p>
+        </div>
+
+        <div class="think-list">
+          <!-- Question 1 -->
+          <article class="think-item" id="q1">
+            <div class="think-meta">
+              <span class="think-num-badge">1</span>
+              <span class="think-tag">Question 1</span>
+            </div>
+            <h2 class="think-q">1. On a hot day, will the car misjudge a 50 cm obstacle as nearer or farther?</h2>
+            <div class="think-a">
+              <p>Nearer. Sound travels faster in hot air, so the echo returns sooner. The code assumes a fixed speed of sound, so it calculates a shorter distance. The error is small (a cm or two), but it is always in the “too close” direction.</p>
+            </div>
+          </article>
+
+          <!-- Question 2 -->
+          <article class="think-item" id="q2">
+            <div class="think-meta">
+              <span class="think-num-badge">2</span>
+              <span class="think-tag">Question 2</span>
+            </div>
+            <h2 class="think-q">2. The car reverses with no rear sensor. What could go wrong?</h2>
+            <div class="think-a">
+              <p>The sensor faces forward, so the car backs up blind. It can hit a wall, a person’s foot or another robot behind it. The fix is a rear sensor, or only reversing for a short, safe distance.</p>
+            </div>
+          </article>
+
+          <!-- Question 3 -->
+          <article class="think-item" id="q3">
+            <div class="think-meta">
+              <span class="think-num-badge">3</span>
+              <span class="think-tag">Question 3</span>
+            </div>
+            <h2 class="think-q">3. Why is “turn for 500 ms” an unreliable way to turn a fixed angle?</h2>
+            <div class="think-a">
+              <p>Time isn’t angle. As the battery drains, the motors slow down and the car turns less. Floor grip, wheel slip and uneven motors also change the result. Encoders on the wheels or a gyroscope measure the actual turn instead of guessing it.</p>
+            </div>
+          </article>
+
+          <!-- Question 4 -->
+          <article class="think-item" id="q4">
+            <div class="think-meta">
+              <span class="think-num-badge">4</span>
+              <span class="think-tag">Question 4</span>
+            </div>
+            <h2 class="think-q">4. What happens if you add two more sensors and fire them together?</h2>
+            <div class="think-a">
+              <p>They interfere, because each sensor hears the others’ pings and echoes. This is the same “phantom obstacle” problem as Quiz Q2. The fix is to fire them one at a time, with a short pause between, so each one only listens for its own echo.</p>
+            </div>
+          </article>
+
+          <!-- Question 5 -->
+          <article class="think-item" id="q5">
+            <div class="think-meta">
+              <span class="think-num-badge">5</span>
+              <span class="think-tag">Question 5</span>
+            </div>
+            <h2 class="think-q">5. Why does the code check distance &gt; 0 as well as &lt; 10?</h2>
+            <div class="think-a">
+              <p>When no echo comes back (nothing in range, or the echo is lost), the timing function typically returns 0, which turns into a distance of 0 cm. Without &gt; 0, the car would treat that as an obstacle right in front of it and stop for nothing.</p>
+            </div>
+          </article>
+
+          <!-- Question 6 -->
+          <article class="think-item" id="q6">
+            <div class="think-meta">
+              <span class="think-num-badge">6</span>
+              <span class="think-tag">Question 6</span>
+            </div>
+            <h2 class="think-q">6. Why might the car miss an obstacle only 1 cm away?</h2>
+            <div class="think-a">
+              <p>The HC-SR04 has a blind zone: it can’t measure very short distances (its minimum is around 2 cm). The echo returns while the sensor is still finishing its own ping, so it can’t tell them apart. Objects that close are effectively invisible to it.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>Obstacle Avoidance Car — St. Aloysius School Computer Science Exhibition</div>
+        <div>
+          Credits: <a href="https://github.com/Tijil-Das" target="_blank" rel="noopener noreferrer" class="credit-link">Tijil Das</a>, Shreyam Chaudhury, Shreyas Chatterjee, Shaurya Gupta
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.mobile-nav-toggle');
+    const links = document.querySelector('.nav-links');
+    if (toggle && links) {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        links.classList.toggle('nav-open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!links.contains(e.target) && !toggle.contains(e.target)) {
+          links.classList.remove('nav-open');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

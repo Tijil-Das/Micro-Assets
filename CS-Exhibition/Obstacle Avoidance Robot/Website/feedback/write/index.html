@@ -107,10 +107,11 @@
     </div>
   </footer>
 
+  <script src="../../config.js"></script>
   <script>
     const CONFIG = {
-      workerUrl: "https://obstacle-car-feedback-worker.tijil.workers.dev",
-      passcode: "aloysius-robotics-2026"
+      workerUrl: (window.ROBOT_CONFIG && window.ROBOT_CONFIG.workerUrl) || "https://obstacle-car-feedback-worker.tijil.workers.dev",
+      passcode: (window.ROBOT_CONFIG && window.ROBOT_CONFIG.passcode) || "aloysius-robotics-2026"
     };
 
     document.getElementById('write-form').addEventListener('submit', async (e) => {

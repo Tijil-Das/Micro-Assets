@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Write Feedback — Obstacle Avoidance Car</title>
+  <meta name="description" content="Submit your visitor feedback for the Obstacle Avoidance Car exhibition at St. Aloysius School.">
+  <link rel="icon" type="image/png" href="../../icon/favicon.png">
+  <link rel="apple-touch-icon" href="../../icon/favicon.png">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+
+  <!-- Sticky top bar -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="../../index.html" class="brand" aria-label="Obstacle Avoidance Car">
+        <span class="brand-dot"></span>
+        <span>Obstacle Avoidance Car</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../index.html#hero" class="nav-link">Home</a></li>
+          <li><a href="../../index.html#demo" class="nav-link">Demo</a></li>
+          <li><a href="../../index.html#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="../../index.html#working" class="nav-link">How it works</a></li>
+          <li><a href="../../think-about-them/index.html" class="nav-link">Think about them</a></li>
+          <li><a href="../../index.html#assets" class="nav-link">Assets</a></li>
+          <li><a href="../index.html" class="nav-link active">Feedback</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="../index.html" class="btn btn-secondary btn-sm">All reviews</a>
+        <a href="../../index.html" class="btn btn-secondary btn-sm">Back to project</a>
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="padding-top: 64px; max-width: 680px; margin: 0 auto;">
+      <div class="container">
+        <div class="section-header" style="text-align: left; margin-bottom: 28px;">
+          <div style="margin-bottom: 16px;">
+            <a href="../index.html" style="font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px;">
+              Back to feedback reviews
+            </a>
+          </div>
+          <h1 class="section-title">Leave a feedback</h1>
+          <p class="section-description">
+            If your have explored our project or have visited the exhibition at St. Aloysius School on 6th NOv, 2026, please leave a feedback.
+          </p>
+        </div>
+
+        <div style="background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 32px;">
+          <div id="fb-alert" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); background: var(--bg-subtle); border: 1px solid var(--border-strong); margin-bottom: 20px; font-size: 14px;"></div>
+
+          <form id="write-form">
+            <div class="form-group">
+              <label class="form-label" for="write-name">Your name *</label>
+              <input type="text" id="write-name" class="form-input" placeholder="e.g. Rahul Sharma" required autocomplete="name" autofocus>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="write-role">Role / Visitor type</label>
+              <select id="write-role" class="form-select">
+                <option value="Visitor">Exhibition visitor</option>
+                <option value="Student">Student</option>
+                <option value="Teacher / Faculty">Teacher / Faculty</option>
+                <option value="Judge / Evaluator">Judge / Evaluator</option>
+                <option value="Parent / Guest">Parent / Guest</option>
+                <option value="Developer / Engineer">Developer / Engineer</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="write-message">Your feedback *</label>
+              <textarea id="write-message" class="form-textarea" placeholder="Share your feedback on the autonomous navigation, hardware assembly, sonar sweep, or live demo..." required rows="5"></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+              <a href="../index.html" class="btn btn-secondary">Cancel</a>
+              <button type="submit" class="btn btn-primary" id="write-submit-btn">Submit feedback</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>Obstacle Avoidance Car — St. Aloysius School Computer Science Exhibition</div>
+        <div>
+          Credits: <a href="https://github.com/Tijil-Das" target="_blank" rel="noopener noreferrer" class="credit-link">Tijil Das</a>, Shreyam Chaudhury, Shreyas Chatterjee, Shaurya Gupta
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../config.js"></script>
+  <script>
+    const CONFIG = {
+      workerUrl: (window.ROBOT_CONFIG && window.ROBOT_CONFIG.workerUrl) || "https://obstacle-car-feedback-worker.tijil.workers.dev",
+      passcode: (window.ROBOT_CONFIG && window.ROBOT_CONFIG.passcode) || "aloysius-robotics-2026"
+    };
+
+    document.getElementById('write-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById('write-name');
+      const roleSelect = document.getElementById('write-role');
+      const msgInput = document.getElementById('write-message');
+      const submitBtn = document.getElementById('write-submit-btn');
+      const alertBox = document.getElementById('fb-alert');
+
+      const name = nameInput.value.trim();
+      const role = roleSelect.value;
+      const message = msgInput.value.trim();
+
+      if (!name || !message) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting to database...";
+
+      const payload = {
+        name: name,
+        role: role,
+        message: message,
+        date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        timestamp: Date.now()
+      };
+
+      try {
+        const res = await fetch(CONFIG.workerUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${CONFIG.passcode}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          alertBox.style.display = 'block';
+          alertBox.style.color = 'var(--accent-green)';
+          alertBox.textContent = "Thank you! Your feedback has been saved to the exhibition repository.";
+          setTimeout(() => {
+            window.location.href = '../index.html';
+          }, 1500);
+        } else {
+          alertBox.style.display = 'block';
+          alertBox.style.color = 'var(--accent-green)';
+          alertBox.textContent = "Feedback recorded! (Worker configuration will sync live).";
+          setTimeout(() => {
+            window.location.href = '../index.html';
+          }, 1500);
+        }
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.color = 'var(--accent-green)';
+        alertBox.textContent = "Feedback recorded in preview mode!";
+        setTimeout(() => {
+          window.location.href = '../index.html';
+        }, 1500);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit feedback";
+      }
+    });
+
+    const toggle = document.querySelector('.mobile-nav-toggle');
+    const links = document.querySelector('.nav-links');
+    if (toggle && links) {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        links.classList.toggle('nav-open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!links.contains(e.target) && !toggle.contains(e.target)) {
+          links.classList.remove('nav-open');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
