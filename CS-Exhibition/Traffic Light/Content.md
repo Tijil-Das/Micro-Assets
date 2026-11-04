@@ -6,7 +6,7 @@
 - **Instructors:**  
   - Dr. Venkat Bokka, IHFC ([venkat@ihfc.co.in](mailto:venkat@ihfc.co.in))  
   - Ms. Mrinmoyee Choudhuri, IHFC ([mrinmoyee@ihfc.co.in](mailto:mrinmoyee@ihfc.co.in))  
-- **Source Code Sketch:** [`Arduino Code.ino`](./Arduino%20Code.ino)  
+- **Source Code Sketch:** [`Traffic Light.ino`](./Traffic%20Light.ino)  
 - **Circuit Diagram:** [`Wiring.png`](./Wiring.png)  
 
 ---
@@ -109,7 +109,7 @@ stateDiagram-v2
 
 ## 6. Arduino Code
 
-The code below matches the original worksheet verbatim. The standalone sketch file is available at [`Arduino Code.ino`](./Arduino%20Code.ino).
+The standalone sketch file is available at [`Traffic Light.ino`](./Traffic%20Light.ino).
 
 ```cpp
 // Define LED pins

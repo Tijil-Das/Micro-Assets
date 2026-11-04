@@ -6,7 +6,7 @@
 - **Instructors:**  
   - Dr. Venkat Bokka, IHFC ([venkat@ihfc.co.in](mailto:venkat@ihfc.co.in))  
   - Ms. Mrinmoyee Choudhuri, IHFC ([mrinmoyee@ihfc.co.in](mailto:mrinmoyee@ihfc.co.in))  
-- **Source Code Sketch:** [`Arduino Code.ino`](./Arduino%20Code.ino)  
+- **Source Code Sketch:** [`Obstacle Avoidance Robot.ino`](./Obstacle%20Avoidance%20Robot.ino)  
 - **Circuit Diagram:** [`Wiring.png`](./Wiring.png)  
 
 ---
@@ -79,7 +79,7 @@ The objective of this project is to build an obstacle-avoiding robot using an Ar
 - Connect your Arduino Uno R3 to your computer using a USB cable.
 - Open the Arduino IDE and select the correct board and port by navigating to `Tools > Board > Arduino Uno` and `Tools > Port > (Select your Arduino's port)`.
 - Open a new sketch by navigating to `File > New`.
-- Write the following code into the Arduino IDE:
+- Write the code into the Arduino IDE:
 - Click the Verify button / $\checkmark$ icon to compile the code and check for errors.
 - Once the code compiles successfully, click the Upload button (right arrow icon) to upload the code to the Arduino board.
 
@@ -135,81 +135,101 @@ flowchart TD
 
 ## 6. Arduino Code
 
-The code below matches the original worksheet verbatim. The standalone sketch file is available at [`Arduino Code.ino`](./Arduino%20Code.ino).
+The standalone sketch file is available at [`Obstacle Avoidance Robot.ino`](./Obstacle%20Avoidance%20Robot.ino).
 
 ```cpp
 #include <Servo.h>
+
 Servo Myservo;
-#define trigPin 9           // Trig Pin Of HC-SR04
-#define echoPin 8          // Echo Pin Of HC-SR04
-#define MLa 4                 //left motor 1st pin
-#define MLb 5                 //left motor 2nd pin
-#define MRa 6                //right motor 1st pin
-#define MRb 7                //right motor 2nd pin
+
+#define trigPin 9       // Trig Pin Of HC-SR04
+#define echoPin 8       // Echo Pin Of HC-SR04
+#define MLa 4           // Left motor 1st pin
+#define MLb 5           // Left motor 2nd pin
+#define MRa 6           // Right motor 1st pin
+#define MRb 7           // Right motor 2nd pin
 
 long duration, distance;
 
 void setup() {
-  Serial.begin(9600);
-  pinMode(MLa, OUTPUT);        // Set Motor Pins As O/P
-  pinMode(MLb, OUTPUT);
-  pinMode(MRa, OUTPUT);
-  pinMode(MRb, OUTPUT);
-  pinMode(trigPin, OUTPUT);       // Set Trig Pin As O/P To Transmit Waves
-  pinMode(echoPin, INPUT);        //Set Echo Pin As I/P To Receive Reflected Waves
-  Myservo.attach(10);
+    Serial.begin(9600);
+
+    pinMode(MLa, OUTPUT);
+    pinMode(MLb, OUTPUT);
+    pinMode(MRa, OUTPUT);
+    pinMode(MRb, OUTPUT);
+
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+
+    Myservo.attach(10);
 }
+
 void loop()
 {
-  Serial.begin(9600);
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);        // Transmit Waves For 10us
-  delayMicroseconds(10);
-  duration = pulseIn(echoPin, HIGH);       // Receive Reflected Waves
-  distance = duration / 58.2;              // Get Distance
-  Serial.println(distance);
-  delay(10);
-  if (distance > 15)                       // Condition For Absence Of Obstacle
-  {
-    Myservo.write(90);
-    digitalWrite(MRb, HIGH);                 // Move Forward
-    digitalWrite(MRa, LOW);
-    digitalWrite(MLb, HIGH);
-    digitalWrite(MLa, LOW);
-  }
-  else if ((distance < 10)&&(distance > 0))          // Condition For Presence Of Obstacle
-  {
-    digitalWrite(MRb, LOW);           //Stop
-    digitalWrite(MRa, LOW);
-    digitalWrite(MLb, LOW);
-    digitalWrite(MLa, LOW);
-    delay(100);
+    Serial.begin(9600);
 
-    Myservo.write(0);
-    delay(500);
-    Myservo.write(180);
-    delay(500);
-    Myservo.write(90);
-    delay(500);
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
 
-    digitalWrite(MRb, LOW);           // Move Backward
-    digitalWrite(MRa, HIGH);
-    digitalWrite(MLb, LOW);
-    digitalWrite(MLa, HIGH);
-    delay(500);
-    digitalWrite(MRb, LOW);           //Stop
-    digitalWrite(MRa, LOW);
-    digitalWrite(MLb, LOW);
-    digitalWrite(MLa, LOW);
-    delay(100);
-    digitalWrite(MRb, HIGH);          // Move Left
-    digitalWrite(MRa, LOW);
-    digitalWrite(MLa, LOW);
-    digitalWrite(MLb, LOW);
-    delay(500);
-  }
+    digitalWrite(trigPin, HIGH);   // Transmit Waves For 10us
+    delayMicroseconds(10);
 
+    duration = pulseIn(echoPin, HIGH);  // Receive Reflected Waves
+    distance = duration / 58.2;         // Get Distance
+
+    Serial.println(distance);
+    delay(10);
+
+    if (distance > 15)   // Condition For Absence Of Obstacle
+    {
+        Myservo.write(90);
+
+        digitalWrite(MRb, HIGH);   // Move Forward
+        digitalWrite(MRa, LOW);
+        digitalWrite(MLb, HIGH);
+        digitalWrite(MLa, LOW);
+    }
+
+    else if ((distance < 10) && (distance > 0))
+    {
+        digitalWrite(MRb, LOW);    // Stop
+        digitalWrite(MRa, LOW);
+        digitalWrite(MLb, LOW);
+        digitalWrite(MLa, LOW);
+
+        delay(100);
+
+        Myservo.write(0);
+        delay(500);
+
+        Myservo.write(180);
+        delay(500);
+
+        Myservo.write(90);
+        delay(500);
+
+        digitalWrite(MRb, LOW);    // Move Backward
+        digitalWrite(MRa, HIGH);
+        digitalWrite(MLb, LOW);
+        digitalWrite(MLa, HIGH);
+
+        delay(500);
+
+        digitalWrite(MRb, LOW);    // Stop
+        digitalWrite(MRa, LOW);
+        digitalWrite(MLb, LOW);
+        digitalWrite(MLa, LOW);
+
+        delay(100);
+
+        digitalWrite(MRb, HIGH);   // Move Left
+        digitalWrite(MRa, LOW);
+        digitalWrite(MLa, LOW);
+        digitalWrite(MLb, LOW);
+
+        delay(500);
+    }
 }
 ```
 
