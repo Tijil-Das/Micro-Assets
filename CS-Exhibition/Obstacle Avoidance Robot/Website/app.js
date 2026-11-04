@@ -1148,7 +1148,7 @@ function renderFeedbackGrid(feedbacks) {
       <div class="feedback-empty">
         <p style="font-size: 15px; color: var(--fg); font-weight: 500; margin-bottom: 6px;">No feedback entries yet</p>
         <p style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">Be the first visitor to share your review of our exhibition demonstration.</p>
-        <button class="btn btn-secondary btn-sm" onclick="openFeedbackPanel()">Write feedback</button>
+        <button class="btn btn-primary btn-sm" onclick="openFeedbackPanel()">Write feedback</button>
       </div>
     `;
     return;
