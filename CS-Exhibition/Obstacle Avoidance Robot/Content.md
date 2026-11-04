@@ -117,6 +117,13 @@ The complete circuit connects the Arduino Uno R3, HC-SR04 ultrasonic sensor, ser
 
 ## 5. Algorithm & Navigation Logic
 
+[![Navigation Algorithm Flowchart](./flowchart.png)](./flowchart.png)
+
+> **Direct Link:** [Open `flowchart.png` in full resolution](./flowchart.png)
+
+<details>
+<summary><b>Click to view Mermaid Diagram Source</b></summary>
+
 ```mermaid
 flowchart TD
     Start(["Robot Loop Running"]) --> Pulse["Trigger Ultrasonic Pulse (10us)"]
@@ -130,6 +137,8 @@ flowchart TD
     Condition -->|"0 < Distance < 10 cm"| ObstacleDetected["Presence of Obstacle<br/>1. Stop all motors<br/>2. Sweep servo (0° to 180° to 90°)<br/>3. Move Backward for 500ms<br/>4. Stop for 100ms<br/>5. Turn Left for 500ms"]
     ObstacleDetected --> NextCycle
 ```
+
+</details>
 
 ---
 

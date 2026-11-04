@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Obstacle Avoidance Car — A car that sees before it moves</title>
+  <meta name="description" content="Autonomous Arduino Uno obstacle avoidance robot using an HC-SR04 ultrasonic sensor and SG90 servo motor. St. Aloysius School Computer Science Exhibition.">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
+</head>
+<body>
+
+  <!-- Sticky top bar -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="#" class="brand" aria-label="Obstacle Avoidance Car">
+        <span class="brand-dot"></span>
+        <span>Obstacle Avoidance Car</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#hero" class="nav-link active">Home</a></li>
+          <li><a href="#demo" class="nav-link">Demo</a></li>
+          <li><a href="#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="#working" class="nav-link">How it works</a></li>
+          <li><a href="#think-about-them" class="nav-link">Think about them</a></li>
+          <li><a href="#assets" class="nav-link">Assets</a></li>
+          <li><a href="#feedback" class="nav-link">Feedback</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#demo" class="btn btn-primary btn-sm">Watch demo</a>
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero section -->
+    <section class="section hero" id="hero">
+      <div class="container">
+        <div class="hero-block">
+          <div class="hero-tag">
+            <span class="hero-tag-dot"></span>
+            <span>Class 12 computer science exhibition</span>
+          </div>
+
+          <h1 class="hero-title">Obstacle Avoidance Car</h1>
+          <p class="hero-tagline">A car that sees before it moves.</p>
+
+          <p class="hero-description">
+            An autonomous two-wheel drive robot powered by an Arduino Uno that scans its surroundings using high-frequency 40 kHz ultrasonic sonar pulses to navigate around obstacles in real time.
+          </p>
+
+          <div class="hero-credits">
+            Credits: <a href="https://github.com/Tijil-Das" target="_blank" rel="noopener noreferrer" class="credit-link">Tijil Das</a>, Shreyam Chaudhury, Shreyas Chatterjee, Shaurya Gupta, class 12 science, St. Aloysius School.
+          </div>
+
+          <div class="hero-actions">
+            <a href="#demo" class="btn btn-primary">Watch demo</a>
+            <a href="#working" class="btn btn-secondary">Read documentation</a>
+          </div>
+        </div>
+
+        <!-- Product visual frame -->
+        <div class="hero-frame">
+          <div class="frame-bar">
+            <div class="frame-dots">
+              <span class="frame-dot dot-red"></span>
+              <span class="frame-dot dot-amber"></span>
+              <span class="frame-dot dot-green"></span>
+            </div>
+            <span>.car.png</span>
+            <span>16:9</span>
+          </div>
+
+          <div class="hero-media-wrapper">
+            <img id="car-hero-img" class="hero-car-image" src="./.car.png" alt="Obstacle Avoidance Car">
+            <div id="car-hero-placeholder" class="neutral-placeholder" style="display: none;">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              <p class="placeholder-text">Car hero image slot</p>
+              <span class="placeholder-subtext">Website/.car.png</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo video section (HLS chunked streaming in .mp4 folder) -->
+    <section class="section section-subtle" id="demo">
+      <div class="container">
+        <div class="section-header section-header-center">
+          <h2 class="section-title">Demo video</h2>
+          <p class="section-description">
+            Autonomous obstacle avoidance demonstration with ultrasonic pulse ranging and active servo radar scanning.
+          </p>
+        </div>
+
+        <div class="video-frame">
+          <div class="frame-bar">
+            <div class="frame-dots">
+              <span class="frame-dot dot-red"></span>
+              <span class="frame-dot dot-amber"></span>
+              <span class="frame-dot dot-green"></span>
+            </div>
+            <span>HLS stream: .mp4/index.m3u8</span>
+            <span>720p 24fps</span>
+          </div>
+
+          <div class="video-player-box">
+            <video id="demo-video" controls playsinline preload="metadata">
+              <p>Your browser does not support HTML5 video.</p>
+            </video>
+
+            <div id="video-fallback-overlay" class="neutral-placeholder" style="display: none; position: absolute; inset: 0; background: var(--bg);">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <p class="placeholder-text">Demo video stream ready</p>
+              <span class="placeholder-subtext">Drop HLS stream chunks into Website/.mp4</span>
+            </div>
+          </div>
+
+          <div class="video-meta-bar">
+            <span>Adaptive bitrate HLS streaming</span>
+            <span style="font-family: var(--font-mono); color: var(--accent);">HC-SR04 sonar telemetry</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Photo gallery section -->
+    <section class="section" id="gallery">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Photo gallery</h2>
+          <p class="section-description">
+            18 photos documenting the chassis assembly, wiring, calibration, and live exhibition demonstration.
+          </p>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid">
+          <!-- 18 photo cards generated via app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary of working section -->
+    <section class="section section-subtle" id="working">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">How the car works</h2>
+          <p class="section-description">
+            An engineering summary of acoustic ranging physics, servo kinematics, motor drive electronics, and autonomous decision logic.
+          </p>
+        </div>
+
+        <!-- Technical specifications table -->
+        <div class="specs-table-wrapper">
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>Subsystem</th>
+                <th>Hardware component</th>
+                <th>Interface</th>
+                <th class="numeric-col">Operating value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Microcontroller</strong></td>
+                <td>Arduino Uno R3 (ATmega328P)</td>
+                <td>Pins 4–10, 5V / Vin</td>
+                <td class="numeric-col">16 MHz</td>
+              </tr>
+              <tr>
+                <td><strong>Acoustic sensor</strong></td>
+                <td>HC-SR04 ultrasonic module</td>
+                <td>TRIG pin 9, ECHO pin 8</td>
+                <td class="numeric-col">40 kHz</td>
+              </tr>
+              <tr>
+                <td><strong>Scanning actuator</strong></td>
+                <td>TowerPro SG90 micro servo</td>
+                <td>PWM pin 10</td>
+                <td class="numeric-col">0° to 180°</td>
+              </tr>
+              <tr>
+                <td><strong>Motor controller</strong></td>
+                <td>L298N dual H-bridge</td>
+                <td>Pins 7, 6 (Right), Pins 5, 4 (Left)</td>
+                <td class="numeric-col">2A peak</td>
+              </tr>
+              <tr>
+                <td><strong>Power supply</strong></td>
+                <td>9V DC battery pack</td>
+                <td>Isolated rail, common ground</td>
+                <td class="numeric-col">9V / 5V</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Asymmetric two-column technical breakdown -->
+        <div class="tech-split">
+          <div class="tech-panel">
+            <h3 class="tech-panel-title">1. Ultrasonic sonar physics</h3>
+            <p class="tech-panel-text">
+              The HC-SR04 emits an inaudible 40 kHz acoustic burst when triggered by a 10 µs HIGH pulse on pin 9. Sound travels through air at approximately 340 m/s (29.1 µs/cm).
+            </p>
+            <p class="tech-panel-text">
+              The sensor measures round-trip flight duration on pin 8. The Arduino calculates one-way distance:
+            </p>
+            <div class="code-box">
+              distance = duration / 58.2; // cm
+            </div>
+          </div>
+
+          <div class="tech-panel">
+            <h3 class="tech-panel-title">2. Active radar sweep and motor drive</h3>
+            <p class="tech-panel-text">
+              The HC-SR04 sensor has a narrow beam angle of approximately 15°. Mounting it to an SG90 servo allows an active 180° radar sweep across right (0°), center (90°), and left (180°) positions to identify open escape trajectories.
+            </p>
+            <p class="tech-panel-text">
+              The L298N motor driver converts low-power logic signals into high-current polarity switching for the two geared motors. Motor power is decoupled from the Arduino logic rail with a shared common ground to eliminate inductive brownout resets.
+            </p>
+          </div>
+        </div>
+
+        <!-- State machine logic -->
+        <div class="tech-panel">
+          <h3 class="tech-panel-title" style="margin-bottom: 20px;">Autonomous control loop</h3>
+          <div class="state-flow">
+            <div class="state-step">
+              <span class="state-indicator ind-clear"></span>
+              <div class="state-body">
+                <div class="state-head">
+                  <span class="state-name">Condition 1: clear path</span>
+                  <span class="state-condition">distance &gt; 15 cm</span>
+                </div>
+                <p class="state-desc">
+                  Servo centers at 90°. Both motors drive forward (MRb=HIGH, MLb=HIGH). Continuous cruise speed.
+                </p>
+              </div>
+            </div>
+
+            <div class="state-step">
+              <span class="state-indicator ind-buffer"></span>
+              <div class="state-body">
+                <div class="state-head">
+                  <span class="state-name">Condition 2: hysteresis buffer zone</span>
+                  <span class="state-condition">10 cm ≤ distance ≤ 15 cm</span>
+                </div>
+                <p class="state-desc">
+                  Maintains current motion state to prevent oscillation (flip-flopping) caused by acoustic measurement jitter.
+                </p>
+              </div>
+            </div>
+
+            <div class="state-step">
+              <span class="state-indicator ind-alert"></span>
+              <div class="state-body">
+                <div class="state-head">
+                  <span class="state-name">Condition 3: obstacle avoidance routine</span>
+                  <span class="state-condition">0 &lt; distance &lt; 10 cm</span>
+                </div>
+                <p class="state-desc">
+                  1. Stop all motors (100 ms).<br>
+                  2. Sweep servo across 0° (right), 180° (left), and 90° (center) at 500 ms intervals.<br>
+                  3. Drive backward for 500 ms.<br>
+                  4. Stop for 100 ms.<br>
+                  5. Pivot turn left for 500 ms.<br>
+                  6. Re-evaluate distance in the next loop cycle.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- "Think about them" section -->
+    <section class="section" id="think-about-them">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Think about them</h2>
+          <p class="section-description">
+            Six questions exploring acoustics, thermodynamics, sensor blind zones, and motor control edge cases.
+          </p>
+        </div>
+
+        <div class="think-list" id="think-list">
+          <!-- Populated with all 6 questions and answers -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Assets section -->
+    <section class="section section-subtle" id="assets">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Assets</h2>
+          <p class="section-description">
+            Project files in Website/Assets. Click anywhere on an asset row to view, or Download to save the file.
+          </p>
+        </div>
+
+        <div class="assets-table-wrapper">
+          <table class="assets-table">
+            <thead>
+              <tr>
+                <th>Asset name</th>
+                <th>Filename</th>
+                <th>Format</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="assets-tbody">
+              <!-- Populated via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feedback section -->
+    <section class="section" id="feedback">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Visitor feedback</h2>
+          <p class="section-description">
+            If your have explored our project or have visited the exhibition at St. Aloysius School on 6th NOv, 2026, please leave a feedback.
+          </p>
+        </div>
+
+        <div class="feedback-actions-bar">
+          <div>
+            <div style="font-weight: 600; font-size: 15px; color: var(--fg); margin-bottom: 4px;">Exhibition reviews &amp; notes</div>
+            <div style="font-size: 13px; color: var(--muted);">Directly committed to the repository database via secure Cloudflare Worker.</div>
+          </div>
+          <button class="btn btn-primary" onclick="openFeedbackPanel()">Write feedback</button>
+        </div>
+
+        <div class="feedback-grid" id="feedback-grid">
+          <!-- Populated from feedbacks.json / Cloudflare Worker -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Asset viewer modal -->
+  <div class="modal-backdrop" id="asset-modal" role="dialog" aria-modal="true" aria-labelledby="modal-asset-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-asset-title">Asset viewer</h3>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn btn-primary btn-sm" id="modal-download-btn">Download</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeModal('asset-modal')" aria-label="Close modal">Close</button>
+        </div>
+      </div>
+      <div class="modal-body" id="modal-asset-body">
+        <!-- Rendered asset content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo gallery lightbox modal -->
+  <div class="modal-backdrop" id="lightbox-modal" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="lightbox-title">Photo gallery</h3>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="prevLightbox()">Previous</button>
+          <button class="btn btn-secondary btn-sm" onclick="nextLightbox()">Next</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeModal('lightbox-modal')" aria-label="Close lightbox">Close</button>
+        </div>
+      </div>
+      <div class="modal-body" id="lightbox-body">
+        <!-- Enlarged photo -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback panel modal -->
+  <div class="modal-backdrop" id="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="fb-modal-title">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="fb-modal-title">Write feedback</h3>
+        <button class="btn btn-ghost btn-sm" onclick="closeFeedbackPanel()" aria-label="Close feedback panel">Close</button>
+      </div>
+      <div class="modal-body" style="padding: 24px;">
+        <div id="fb-alert" style="display: none; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--bg-subtle); border: 1px solid var(--border-strong); margin-bottom: 16px; font-size: 13px;"></div>
+        <form id="feedback-form">
+          <div class="form-group">
+            <label class="form-label" for="fb-name">Your name *</label>
+            <input type="text" id="fb-name" class="form-input" placeholder="e.g. Rahul Sharma" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="fb-role">Role / Visitor type</label>
+            <select id="fb-role" class="form-select">
+              <option value="Visitor">Exhibition visitor</option>
+              <option value="Student">Student</option>
+              <option value="Teacher / Faculty">Teacher / Faculty</option>
+              <option value="Judge / Evaluator">Judge / Evaluator</option>
+              <option value="Parent / Guest">Parent / Guest</option>
+              <option value="Developer / Engineer">Developer / Engineer</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="fb-message">Your feedback *</label>
+            <textarea id="fb-message" class="form-textarea" placeholder="Share your impressions of the robot car, exhibition demonstration, or navigation logic..." required></textarea>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+            <button type="button" class="btn btn-secondary" onclick="closeFeedbackPanel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="fb-submit-btn">Submit feedback</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-title">Obstacle Avoidance Car</div>
+          <p class="footer-brand-desc">
+            A car that sees before it moves. Class 12 Science Computer Science Exhibition project, St. Aloysius School.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-heading">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="#hero" class="footer-link">Home</a></li>
+            <li><a href="#demo" class="footer-link">Demo video</a></li>
+            <li><a href="#gallery" class="footer-link">Photo gallery</a></li>
+            <li><a href="#working" class="footer-link">How it works</a></li>
+            <li><a href="#think-about-them" class="footer-link">Think about them</a></li>
+            <li><a href="#assets" class="footer-link">Assets</a></li>
+            <li><a href="#feedback" class="footer-link">Visitor feedback</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-heading">Credits</div>
+          <p style="font-size: 14px; color: var(--muted); line-height: 1.6;">
+            <a href="https://github.com/Tijil-Das" target="_blank" rel="noopener noreferrer" class="credit-link">Tijil Das</a><br>
+            Shreyam Chaudhury<br>
+            Shreyas Chatterjee<br>
+            Shaurya Gupta<br>
+            Class 12 Science, St. Aloysius School
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>St. Aloysius School Computer Science Exhibition</div>
+        <div>Dark mode, developer-grade design</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
