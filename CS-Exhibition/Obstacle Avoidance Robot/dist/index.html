@@ -422,7 +422,10 @@
             <div style="font-weight: 600; font-size: 15px; color: var(--fg); margin-bottom: 4px;">Exhibition reviews &amp; notes</div>
             <div style="font-size: 13px; color: var(--muted);">Directly committed to the repository database via secure Cloudflare Worker.</div>
           </div>
-          <button class="btn btn-primary" onclick="openFeedbackPanel()">Write feedback</button>
+          <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="openFeedbackPanel()">Write feedback</button>
+            <a href="./write-feedback/index.html" class="btn btn-secondary">Direct write page</a>
+          </div>
         </div>
 
         <div class="feedback-grid" id="feedback-grid">

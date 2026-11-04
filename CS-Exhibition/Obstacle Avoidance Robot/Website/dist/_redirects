@@ -1,0 +1,10 @@
+/assets              /assets/index.html            200
+/assets/             /assets/index.html            200
+/write-feedback      /write-feedback/index.html    200
+/write-feedback/     /write-feedback/index.html    200
+/feedback/write      /feedback/write/index.html    200
+/feedback/write/     /feedback/write/index.html    200
+/feedback            /feedback/index.html          200
+/feedback/           /feedback/index.html          200
+/think-about-them    /think-about-them/index.html  200
+/think-about-them/   /think-about-them/index.html  200

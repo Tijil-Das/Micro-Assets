@@ -374,9 +374,16 @@ function initAssetTable() {
   `).join('');
 }
 
+function resolveAssetPath(filePath) {
+  if (window.location.pathname.includes('/assets') && !filePath.startsWith('../') && !filePath.startsWith('/')) {
+    return '../' + filePath;
+  }
+  return filePath;
+}
+
 function triggerDownload(filePath, targetName) {
   const link = document.createElement('a');
-  link.href = filePath;
+  link.href = resolveAssetPath(filePath);
   link.download = targetName;
   document.body.appendChild(link);
   link.click();
@@ -384,8 +391,10 @@ function triggerDownload(filePath, targetName) {
 }
 
 function viewAsset(assetId) {
-  const asset = assetRegistry.find(a => a.id === assetId);
-  if (!asset) return;
+  const rawAsset = assetRegistry.find(a => a.id === assetId);
+  if (!rawAsset) return;
+
+  const asset = { ...rawAsset, file: resolveAssetPath(rawAsset.file) };
 
   const modal = document.getElementById('asset-modal');
   const title = document.getElementById('modal-asset-title');
