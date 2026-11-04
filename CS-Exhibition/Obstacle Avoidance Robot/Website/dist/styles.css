@@ -711,10 +711,10 @@ img, video {
 
 .tech-panel-text {
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--fg-2);
   margin-bottom: 16px;
-  text-align: center;
+  text-align: left;
 }
 
 .code-box {
@@ -727,7 +727,7 @@ img, video {
   line-height: 1.5;
   color: var(--fg);
   overflow-x: auto;
-  text-align: center;
+  text-align: left;
 }
 
 /* State machine rows */
@@ -735,6 +735,8 @@ img, video {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 .state-step {
@@ -743,9 +745,8 @@ img, video {
   border-radius: var(--radius-md);
   padding: 16px 20px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   gap: 16px;
   transition: border-color var(--trans);
 }
@@ -758,7 +759,7 @@ img, video {
   width: 8px;
   height: 8px;
   border-radius: var(--radius-full);
-  margin-top: 0;
+  margin-top: 6px;
   flex-shrink: 0;
 }
 
@@ -773,8 +774,9 @@ img, video {
 .state-head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 6px;
 }
 
@@ -793,8 +795,8 @@ img, video {
 .state-desc {
   font-size: 14px;
   color: var(--fg-2);
-  line-height: 1.5;
-  text-align: center;
+  line-height: 1.6;
+  text-align: left;
 }
 
 /* "Think about them" Section — Questions in Red, Answers in Green, Center Aligned */
