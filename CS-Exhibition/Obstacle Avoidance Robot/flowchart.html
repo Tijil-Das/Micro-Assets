@@ -240,31 +240,31 @@
       </defs>
 
       <!-- Start -> Pulse -->
-      <path d="M 430 92 L 430 130" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
+      <path d="M 430 97 L 430 130" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
 
       <!-- Pulse -> ReadEcho -->
-      <path d="M 430 190 L 430 228" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
+      <path d="M 430 199 L 430 228" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
 
       <!-- ReadEcho -> CalcDist -->
-      <path d="M 430 292 L 430 330" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
+      <path d="M 430 297 L 430 330" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
 
-      <!-- CalcDist -> Condition -->
-      <path d="M 430 395 L 430 435" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
+      <!-- CalcDist -> Condition Diamond top tip -->
+      <path d="M 430 399 L 430 418" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
 
-      <!-- Condition -> ClearPath (Left Branch) -->
-      <path d="M 355 510 L 225 510 L 225 615" stroke="#2ea043" stroke-width="2" fill="none" marker-end="url(#arrow-green)" />
+      <!-- Condition Left Tip (324, 524) -> ClearPath (Left Branch) -->
+      <path d="M 324 524 L 225 524 L 225 615" stroke="#2ea043" stroke-width="2" fill="none" marker-end="url(#arrow-green)" />
 
-      <!-- Condition -> ObstacleDetected (Right Branch) -->
-      <path d="M 505 510 L 640 510 L 640 595" stroke="#da3633" stroke-width="2" fill="none" marker-end="url(#arrow-red)" />
+      <!-- Condition Right Tip (536, 524) -> ObstacleDetected (Right Branch) -->
+      <path d="M 536 524 L 640 524 L 640 595" stroke="#da3633" stroke-width="2" fill="none" marker-end="url(#arrow-red)" />
 
-      <!-- ClearPath -> Merge -->
-      <path d="M 225 780 L 225 890 L 370 890" stroke="#6e7681" stroke-width="2" fill="none" />
+      <!-- ClearPath -> Continuous T-Junction Merge -->
+      <path d="M 225 792 L 225 865 L 430 865" stroke="#6e7681" stroke-width="2" fill="none" />
 
-      <!-- ObstacleDetected -> Merge -->
-      <path d="M 640 845 L 640 890 L 490 890" stroke="#6e7681" stroke-width="2" fill="none" />
+      <!-- ObstacleDetected -> Continuous T-Junction Merge -->
+      <path d="M 640 801 L 640 865 L 430 865" stroke="#6e7681" stroke-width="2" fill="none" />
 
-      <!-- Merge -> Next Cycle -->
-      <path d="M 430 890 L 430 930" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
+      <!-- Center downward arrow from T-Junction into Next Cycle -->
+      <path d="M 430 865 L 430 930" stroke="#6e7681" stroke-width="2" fill="none" marker-end="url(#arrow-gray)" />
     </svg>
 
     <!-- Node 1: Start -->
@@ -291,7 +291,7 @@
     </div>
 
     <!-- Node 5: Distance Check Diamond -->
-    <div class="node node-diamond theme-decision" style="top: 435px; left: 355px;">
+    <div class="node node-diamond theme-decision" style="top: 449px; left: 355px;">
       <div class="diamond-inner">
         <div style="font-size: 16px; font-weight: 700;">Distance Check</div>
         <div style="font-size: 11.5px; opacity: 0.85; margin-top: 4px;">Evaluate Range</div>
@@ -299,10 +299,10 @@
     </div>
 
     <!-- Branch Decision Badges -->
-    <div class="badge badge-green" style="top: 494px; left: 195px;">
+    <div class="badge badge-green" style="top: 508px; left: 195px;">
       distance &gt; 15 cm
     </div>
-    <div class="badge badge-red" style="top: 494px; left: 520px;">
+    <div class="badge badge-red" style="top: 508px; left: 520px;">
       0 &lt; distance &lt; 10 cm
     </div>
 
