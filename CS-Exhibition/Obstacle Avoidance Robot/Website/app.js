@@ -1292,8 +1292,21 @@ function initNavigation() {
   const toggle = document.querySelector('.mobile-nav-toggle');
   const links = document.querySelector('.nav-links');
   if (toggle && links) {
-    toggle.addEventListener('click', () => {
-      links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      links.classList.toggle('nav-open');
+    });
+
+    links.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        links.classList.remove('nav-open');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!links.contains(e.target) && !toggle.contains(e.target)) {
+        links.classList.remove('nav-open');
+      }
     });
   }
 }

@@ -32,6 +32,13 @@
       <div class="nav-actions">
         <a href="./write/index.html" class="btn btn-primary btn-sm">Write feedback</a>
         <a href="../index.html" class="btn btn-secondary btn-sm">Back to project</a>
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
   </header>
@@ -138,6 +145,20 @@
       // Check if URL has hash or query for write
       if (window.location.hash === '#write' || window.location.search.includes('write')) {
         openFeedbackModal();
+      }
+
+      const toggle = document.querySelector('.mobile-nav-toggle');
+      const links = document.querySelector('.nav-links');
+      if (toggle && links) {
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          links.classList.toggle('nav-open');
+        });
+        document.addEventListener('click', (e) => {
+          if (!links.contains(e.target) && !toggle.contains(e.target)) {
+            links.classList.remove('nav-open');
+          }
+        });
       }
     });
 

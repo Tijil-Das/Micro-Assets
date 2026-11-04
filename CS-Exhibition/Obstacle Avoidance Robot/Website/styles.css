@@ -32,6 +32,10 @@
   --accent-red:    #f87171;       /* Question Red */
   --accent-green:  #34d399;       /* Answer Green */
 
+  /* JioTV Max Theme Red (Flat, Solid, No Glow) */
+  --red-jiotv:       #E50027;     /* Official JioTV Max Theme Red */
+  --red-jiotv-hover: #C80022;     /* Crisp darker red on hover */
+
   /* Semantic */
   --success:       #10b981;
   --warning:       #f59e0b;
@@ -71,7 +75,7 @@ html {
 
 body {
   min-height: 100vh;
-  background: var(--bg);
+  background: #000000;
   color: var(--fg-2);
   line-height: 1.6;
   overflow-x: hidden;
@@ -158,29 +162,33 @@ img, video {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .brand-dot {
   width: 8px;
   height: 8px;
   border-radius: var(--radius-full);
-  background: var(--accent);
+  background: var(--red-jiotv);
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   list-style: none;
+  white-space: nowrap;
 }
 
 .nav-link {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
   color: var(--muted);
-  padding: 6px 12px;
+  padding: 6px 10px;
   border-radius: var(--radius-sm);
   transition: color var(--trans), background-color var(--trans);
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -196,6 +204,8 @@ img, video {
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Buttons */
@@ -212,6 +222,7 @@ img, video {
   line-height: 1;
   transition: background-color var(--trans), border-color var(--trans), color var(--trans);
   white-space: nowrap;
+  box-shadow: none !important;
 }
 
 .btn-sm {
@@ -221,14 +232,17 @@ img, video {
 }
 
 .btn-primary {
-  background: var(--fg);
-  color: #000000;
-  border: 1px solid var(--fg);
+  background: var(--red-jiotv);
+  color: #ffffff;
+  border: 1px solid var(--red-jiotv);
+  font-weight: 600;
+  box-shadow: none !important;
 }
 
 .btn-primary:hover {
-  background: #e2e8f0;
-  border-color: #e2e8f0;
+  background: var(--red-jiotv-hover);
+  border-color: var(--red-jiotv-hover);
+  box-shadow: none !important;
 }
 
 .btn-secondary {
@@ -345,7 +359,7 @@ img, video {
   width: 6px;
   height: 6px;
   border-radius: var(--radius-full);
-  background: var(--accent);
+  background: var(--red-jiotv);
 }
 
 .hero-title {
@@ -542,7 +556,7 @@ img, video {
 }
 
 .gallery-card:hover {
-  border-color: var(--border-hover);
+  border-color: var(--cherry-border);
   background: var(--surface-hover);
 }
 
@@ -649,6 +663,11 @@ img, video {
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg);
   padding: 24px;
+  transition: border-color var(--trans);
+}
+
+.tech-panel:hover {
+  border-color: var(--cherry-border);
 }
 
 .tech-panel-title {
@@ -740,33 +759,36 @@ img, video {
   line-height: 1.5;
 }
 
-/* "Think about them" Section — Questions in Red, Answers in Green */
+/* "Think about them" Section — Questions in Red, Answers in Green, Center Aligned */
 .think-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 900px;
+  gap: 20px;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 .think-item {
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg);
-  padding: 24px;
-  transition: border-color var(--trans), background-color var(--trans);
+  padding: 28px 24px;
+  text-align: center;
+  transition: border-color var(--trans), background-color var(--trans), box-shadow var(--trans);
   position: relative;
 }
 
 .think-item:hover {
-  border-color: rgba(248, 113, 113, 0.4);
+  border-color: var(--border-hover);
   background: var(--surface-hover);
 }
 
 .think-meta {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 .think-num-badge {
@@ -776,9 +798,9 @@ img, video {
   width: 24px;
   height: 24px;
   border-radius: var(--radius-full);
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: var(--accent-red);
+  background: rgba(229, 0, 39, 0.12);
+  border: 1px solid rgba(229, 0, 39, 0.35);
+  color: #f87171;
   font-size: 12px;
   font-weight: 600;
   font-family: var(--font-mono);
@@ -790,25 +812,32 @@ img, video {
   font-family: var(--font-mono);
 }
 
-/* Question in Red */
+/* Question in Red, Centered */
 .think-q {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 600;
   line-height: 1.4;
   color: var(--accent-red);
-  margin-bottom: 12px;
+  text-align: center;
+  margin-bottom: 16px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Answer in Green */
+/* Answer in Green, Centered */
 .think-a {
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--accent-green);
-  padding-left: 16px;
-  border-left: 2px solid var(--accent);
+  text-align: center;
   background: rgba(16, 185, 129, 0.05);
-  padding: 12px 16px;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Feedback Section */
@@ -1191,19 +1220,71 @@ img, video {
   }
 }
 
-/* Mobile Nav Sheet */
-@media (max-width: 768px) {
+/* Responsive Navigation & Breakpoints */
+@media (max-width: 1040px) {
   .nav-links {
     display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: #000000;
+    border-bottom: 1px solid var(--border-strong);
+    flex-direction: column;
+    padding: 16px 24px;
+    gap: 8px;
+    z-index: 99;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.95);
+  }
+  .nav-links.nav-open {
+    display: flex;
+  }
+  .nav-links .nav-link {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 15px;
   }
   .mobile-nav-toggle {
     display: inline-flex;
   }
+}
+
+@media (max-width: 768px) {
   .section {
     padding-top: 64px;
     padding-bottom: 64px;
   }
   .hero-title {
     font-size: 36px;
+  }
+}
+
+@media (max-width: 640px) {
+  .brand {
+    font-size: 13px;
+    gap: 6px;
+  }
+  .nav-actions .btn {
+    display: none; /* Hide Watch Demo button on mobile header to prevent cramped overflow */
+  }
+  .section {
+    padding-top: 52px;
+    padding-bottom: 52px;
+  }
+  .hero-title {
+    font-size: 30px;
+  }
+  .hero-tagline {
+    font-size: 16px;
+  }
+  .think-item {
+    padding: 20px 16px;
+  }
+  .think-q {
+    font-size: 17px;
+  }
+  .think-a {
+    padding: 14px 16px;
+    font-size: 14px;
   }
 }
