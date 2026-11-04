@@ -119,16 +119,16 @@ The complete circuit connects the Arduino Uno R3, HC-SR04 ultrasonic sensor, ser
 
 ```mermaid
 flowchart TD
-    Start([Robot Loop Running]) --> Pulse[Trigger Ultrasonic Pulse 10µs]
-    Pulse --> ReadEcho[duration = pulseIn echoPin, HIGH]
-    ReadEcho --> CalcDist[distance = duration / 58.2]
-    CalcDist --> Condition{Distance Evaluation}
+    Start(["Robot Loop Running"]) --> Pulse["Trigger Ultrasonic Pulse (10us)"]
+    Pulse --> ReadEcho["Measure Echo Pulse: pulseIn(echoPin, HIGH)"]
+    ReadEcho --> CalcDist["Calculate Distance = duration / 58.2"]
+    CalcDist --> Condition{"Distance Check"}
 
-    Condition -->|distance > 15| ClearPath[Condition For Absence Of Obstacle\n• Myservo.write 90\n• MRb = HIGH, MRa = LOW\n• MLb = HIGH, MLa = LOW\n• Move Forward]
-    ClearPath --> Next[Next Cycle]
+    Condition -->|"Distance > 15 cm"| ClearPath["Absence of Obstacle<br/>• Center servo at 90°<br/>• Drive Forward (MRb=HIGH, MLb=HIGH)"]
+    ClearPath --> NextCycle["Next Cycle"]
 
-    Condition -->|distance < 10 and distance > 0| ObstacleDetected[Condition For Presence Of Obstacle\n1. Stop all motors: MRb, MRa, MLb, MLa = LOW\n2. Scan: Myservo.write 0 -> 180 -> 90\n3. Move Backward: MRa=HIGH, MLa=HIGH 500ms\n4. Stop: all motors LOW 100ms\n5. Move Left: MRb=HIGH 500ms]
-    ObstacleDetected --> Next
+    Condition -->|"0 < Distance < 10 cm"| ObstacleDetected["Presence of Obstacle<br/>1. Stop all motors<br/>2. Sweep servo (0° to 180° to 90°)<br/>3. Move Backward for 500ms<br/>4. Stop for 100ms<br/>5. Turn Left for 500ms"]
+    ObstacleDetected --> NextCycle
 ```
 
 ---
