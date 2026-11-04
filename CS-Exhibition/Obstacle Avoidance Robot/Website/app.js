@@ -238,32 +238,32 @@ function nextLightbox() {
 const thinkQuestions = [
   {
     num: 1,
-    q: "Hot day, 50 cm obstacle: nearer or farther?",
+    q: "On a hot day, will the car misjudge a 50 cm obstacle as nearer or farther?",
     a: "Nearer. Sound travels faster in hot air, so the echo returns sooner. The code assumes a fixed speed of sound, so it calculates a shorter distance. The error is small (a cm or two), but it is always in the “too close” direction."
   },
   {
     num: 2,
-    q: "Reversing with no rear sensor",
+    q: "The car reverses with no rear sensor. What could go wrong?",
     a: "The sensor faces forward, so the car backs up blind. It can hit a wall, a person’s foot or another robot behind it. The fix is a rear sensor, or only reversing for a short, safe distance."
   },
   {
     num: 3,
-    q: "Why “turn for 500 ms” is unreliable for a fixed angle",
+    q: "Why is “turn for 500 ms” an unreliable way to turn a fixed angle?",
     a: "Time isn’t angle. As the battery drains, the motors slow down and the car turns less. Floor grip, wheel slip and uneven motors also change the result. Encoders on the wheels or a gyroscope measure the actual turn instead of guessing it."
   },
   {
     num: 4,
-    q: "Two more sensors, fired together",
+    q: "What happens if you add two more sensors and fire them together?",
     a: "They interfere, because each sensor hears the others’ pings and echoes. This is the same “phantom obstacle” problem as Quiz Q2. The fix is to fire them one at a time, with a short pause between, so each one only listens for its own echo."
   },
   {
     num: 5,
-    q: "Why check distance > 0 as well as < 10?",
+    q: "Why does the code check distance > 0 as well as < 10?",
     a: "When no echo comes back (nothing in range, or the echo is lost), the timing function typically returns 0, which turns into a distance of 0 cm. Without > 0, the car would treat that as an obstacle right in front of it and stop for nothing."
   },
   {
     num: 6,
-    q: "Why might it miss an obstacle 1 cm away?",
+    q: "Why might the car miss an obstacle only 1 cm away?",
     a: "The HC-SR04 has a blind zone: it can’t measure very short distances (its minimum is around 2 cm). The echo returns while the sensor is still finishing its own ping, so it can’t tell them apart. Objects that close are effectively invisible to it."
   }
 ];
