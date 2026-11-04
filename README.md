@@ -25,6 +25,7 @@
 | [**`Check-Max-File-Size/`**](./Check-Max-File-Size) | CLI Utility | Recursive Windows batch script to scan any folder and pinpoint the largest file and exact byte size. | Windows CMD / Batch |
 | [**`Electron-Win11-Snap-Overlay/`**](./Electron-Win11-Snap-Overlay) | NPM Package / Native Addon | Native Windows 11 Snap Layout flyout overlay for frameless Electron apps with custom HTML title bars. | C++20, Win32, Node-API (N-API), TypeScript, Electron, React |
 | [**`CS-Exhibition/`**](./CS-Exhibition) | Robotics & Hardware | Standalone Arduino robotics projects (Obstacle Avoidance Robot, Traffic Light System) with diagrams, schematics, and sketches. | Arduino (C++), HC-SR04, L298N, SG90 Servo, LEDs |
+| [**`QR-Code-Generator/`**](./QR-Code-Generator) | CLI Utility | High-resolution QR code generator outputting vector SVG and 300 DPI JPG directly to disk. | Python 3, Pillow, qrcode |
 | [**`My-Dev-Learnings/`**](./My-Dev-Learnings) | Knowledge Base | Structured engineering journal covering real-world mistakes, authentication traps, and patterns. | Markdown, Knowledge Base |
 
 ---
@@ -84,6 +85,18 @@
 - **Path:** [`My-Dev-Learnings/README.md`](./My-Dev-Learnings/README.md)
 - **What it does:** A personal engineering repository documenting solutions, debugging steps, and architecture decisions encountered across projects (Win11 snap layouts, OAuth sign-in, COM object memory leaks, etc.).
 - **How to explore:** Start at [`My-Dev-Learnings/START-HERE.md`](./My-Dev-Learnings/START-HERE.md) or scan [`My-Dev-Learnings/INDEX.md`](./My-Dev-Learnings/INDEX.md).
+
+### 8. 📱 [QR Code Generator](./QR-Code-Generator)
+- **Path:** [`QR-Code-Generator/qr_generator.py`](./QR-Code-Generator/qr_generator.py) | [`QR-Code-Generator/generate-qr.cmd`](./QR-Code-Generator/generate-qr.cmd)
+- **What it does:** Generates production-ready QR codes from arbitrary text or URL strings, simultaneously exporting both an infinitely scalable vector `.svg` and an ultra-sharp, high-resolution (300 DPI) `.jpg`. Strictly saves output files in its own directory.
+- **How to run:** Double-click `generate-qr.cmd` or run in terminal:
+  ```bash
+  python QR-Code-Generator/qr_generator.py
+  ```
+  Enter your text when prompted, or pass arguments directly:
+  ```bash
+  python QR-Code-Generator/qr_generator.py "https://example.com" -o my_qr
+  ```
 
 ---
 
