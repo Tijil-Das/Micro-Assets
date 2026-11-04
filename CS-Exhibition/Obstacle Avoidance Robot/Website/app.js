@@ -311,7 +311,7 @@ const assetRegistry = [
   },
   {
     id: "flowchart",
-    file: "Assets/.flowchart.html",
+    file: "Assets/flowchart.html",
     downloadName: "Flowchart.html",
     displayName: "Navigation flowchart",
     type: "HTML diagram",
@@ -319,8 +319,8 @@ const assetRegistry = [
   },
   {
     id: "partlist",
-    file: "Assets/.partlist.txt",
-    downloadName: "partlist.txt",
+    file: "Assets/Partlist.txt",
+    downloadName: "Partlist.txt",
     displayName: "Hardware bill of materials",
     type: "Text document",
     isInternal: false
@@ -335,10 +335,10 @@ const assetRegistry = [
   },
   {
     id: "presentation",
-    file: "Assets/Presentation.pptx",
-    downloadName: "Presentation.pptx",
+    file: "Assets/Presentation.pdf",
+    downloadName: "Presentation.pdf",
     displayName: "Exhibition presentation",
-    type: "PowerPoint deck",
+    type: "PDF document",
     isInternal: true
   },
   {
@@ -419,16 +419,16 @@ function viewAsset(assetId) {
 
 function renderHtmlAsset(asset, container) {
   container.innerHTML = `
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
         <span style="font-size: 13px; color: var(--muted); font-family: var(--font-mono);">${asset.downloadName}</span>
         <a href="${asset.file}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
           <span>Open in new tab</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </a>
       </div>
-      <div style="width: 100%; height: 68vh; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; background: #0b0f17;">
-        <iframe src="${asset.file}" title="${asset.displayName}" style="width: 100%; height: 100%; border: none; display: block;" loading="lazy"></iframe>
+      <div style="width: 100%; height: 74vh; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: auto; background: #0b0f17; -webkit-overflow-scrolling: touch;">
+        <iframe src="${asset.file}" title="${asset.displayName}" style="width: 100%; min-width: 920px; height: 1140px; border: none; display: block;" loading="lazy"></iframe>
       </div>
     </div>
   `;
@@ -1016,30 +1016,17 @@ const pptSlides = [
 let currentSlideIdx = 0;
 
 function renderPresentationAsset(asset, container) {
-  currentSlideIdx = 0;
-  updatePresentationSlide(asset, container);
-}
-
-function updatePresentationSlide(asset, container) {
-  const slide = pptSlides[currentSlideIdx];
   container.innerHTML = `
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
-        <span style="font-size: 13px; color: var(--muted); font-family: var(--font-mono);">
-          Slide ${slide.num} of ${pptSlides.length}
-        </span>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-secondary btn-sm" onclick="prevSlide()" ${currentSlideIdx === 0 ? 'disabled style="opacity:0.4;"' : ''}>Previous</button>
-          <button class="btn btn-secondary btn-sm" onclick="nextSlide()" ${currentSlideIdx === pptSlides.length - 1 ? 'disabled style="opacity:0.4;"' : ''}>Next</button>
-        </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+        <span style="font-size: 13px; color: var(--muted); font-family: var(--font-mono);">${asset.downloadName} (Internal docs)</span>
+        <a href="${asset.file}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span>Open PDF in new tab</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
       </div>
-      <div style="background: var(--bg-subtle); border: 1px solid var(--border-strong); border-radius: 8px; padding: 24px; min-height: 240px;">
-        <span style="font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono);">${slide.subtitle}</span>
-        <h4 style="font-size: 18px; color: var(--fg); font-weight: 600; margin: 8px 0 16px 0;">${slide.title}</h4>
-        <div style="font-size: 14px; line-height: 1.6; color: var(--fg-2);">${slide.body}</div>
-      </div>
-      <div style="font-size: 13px; color: var(--muted); font-family: var(--font-mono);">
-        Presentation.pptx (Internal docs)
+      <div style="width: 100%; height: 74vh; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; background: #121212;">
+        <iframe src="${asset.file}" title="${asset.displayName}" style="width: 100%; height: 100%; border: none; display: block;"></iframe>
       </div>
     </div>
   `;
