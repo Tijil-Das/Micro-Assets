@@ -25,10 +25,16 @@ const distDir = path.join(__dirname, 'dist');
 
 try {
   fs.rmSync(distDir, { recursive: true, force: true });
-  fs.cpSync(websiteDir, distDir, {
-    recursive: true,
-    filter: (source) => !source.includes(path.sep + 'dist')
-  });
+  fs.mkdirSync(distDir, { recursive: true });
+
+  const entries = fs.readdirSync(websiteDir);
+  for (const entry of entries) {
+    if (entry === 'dist' || entry === 'node_modules' || entry === '.git') continue;
+    const srcPath = path.join(websiteDir, entry);
+    const dstPath = path.join(distDir, entry);
+    fs.cpSync(srcPath, dstPath, { recursive: true });
+  }
+
   console.log('Successfully built static assets into ' + distDir);
 } catch (err) {
   console.error('Build error:', err);

@@ -43,192 +43,190 @@ function initHeroImage() {
 }
 
 /* -------------------------------------------------------------------
-   2. DEMO VIDEO & HLS STREAMING (.mp4 folder)
+   2. DEMO VIDEO PLAYBACK (Direct single MP4 file)
    ------------------------------------------------------------------- */
 function initDemoVideo() {
   const video = document.getElementById('demo-video');
-  const fallbackOverlay = document.getElementById('video-fallback-overlay');
-  const hlsSource = './.mp4/index.m3u8';
-  const mp4Direct = './.mp4/demo.mp4';
-
   if (!video) return;
 
-  let streamLoaded = false;
-
-  if (window.Hls && window.Hls.isSupported()) {
-    const hls = new window.Hls({
-      enableWorker: true,
-      lowLatencyMode: true
-    });
-
-    hls.loadSource(hlsSource);
-    hls.attachMedia(video);
-
-    hls.on(window.Hls.Events.MANIFEST_PARSED, () => {
-      streamLoaded = true;
-      if (fallbackOverlay) fallbackOverlay.style.display = 'none';
-    });
-
-    hls.on(window.Hls.Events.ERROR, (event, data) => {
-      if (data.fatal) {
-        tryDirectMp4Fallback();
-      }
-    });
-  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = hlsSource;
-    video.addEventListener('loadedmetadata', () => {
-      streamLoaded = true;
-      if (fallbackOverlay) fallbackOverlay.style.display = 'none';
-    });
-    video.addEventListener('error', () => {
-      tryDirectMp4Fallback();
-    });
-  } else {
-    tryDirectMp4Fallback();
-  }
-
-  function tryDirectMp4Fallback() {
-    video.src = mp4Direct;
-    video.load();
-    video.addEventListener('canplay', () => {
-      streamLoaded = true;
-      if (fallbackOverlay) fallbackOverlay.style.display = 'none';
-    });
-    video.addEventListener('error', () => {
-      if (!streamLoaded && fallbackOverlay) {
-        fallbackOverlay.style.display = 'flex';
-      }
-    });
-  }
+  // Video uses native HTML5 controls and direct MP4 sources (./demo.mp4 and ./.mp4)
+  video.addEventListener('error', () => {
+    console.warn('Video failed to load primary source, trying alternate');
+    if (!video.currentSrc || !video.currentSrc.includes('demo.mp4')) {
+      video.src = './demo.mp4';
+      video.load();
+    }
+  });
 }
 
 /* -------------------------------------------------------------------
-   3. PHOTO GALLERY LIGHTBOX & FALLBACK
+   3. PHOTO GALLERY LIGHTBOX & CURATED PHOTOS
    ------------------------------------------------------------------- */
-const galleryCaptions = [
-  "Chassis base and drive motors",
-  "Motor driver wiring",
-  "Arduino Uno R3 board mounting",
-  "Servo angular mount",
-  "Ultrasonic sensor array",
-  "Motor driver control signal wiring",
-  "Ultrasonic trigger and echo wiring",
-  "Servo pulse signal wiring",
-  "Isolated motor power rail",
-  "Common ground bus plane",
-  "Firmware flashing and test sketch",
-  "Sonar pulse ranging calibration",
-  "Radar sweep bounds calibration",
-  "Threshold logic validation",
-  "Reverse and pivot avoidance sequence",
-  "Obstacle barrier trial run",
-  "Exhibition handout documentation",
-  "Finished car demonstration"
+const galleryPhotos = [
+  {
+    file: "01-unboxing-chassis-and-motors.jpeg",
+    title: "Unboxing & Chassis Preparation",
+    caption: "Laser-cut acrylic base plate with protective kraft mask, alongside dual geared BO DC motors with fitted rubber tread tires."
+  },
+  {
+    file: "02-arduino-uno-r3-board.jpeg",
+    title: "Microcontroller Architecture",
+    caption: "Arduino Uno R3 development board powered by the ATmega328P microcontroller running the autonomous decision-making routine."
+  },
+  {
+    file: "03-hc-sr04-ultrasonic-sensor.jpeg",
+    title: "HC-SR04 Ultrasonic Sonar Module",
+    caption: "Close-up macro of the 40 kHz ultrasonic transmitter (T) and receiver (R) transducers for non-contact obstacle echo ranging."
+  },
+  {
+    file: "04-workbench-circuit-assembly.jpeg",
+    title: "Hardware Assembly Workbench",
+    caption: "Top-down layout during build: Acrylic chassis, Arduino Uno, L298N dual H-bridge motor driver, jumper wiring harness, and purple 18650 Li-ion battery pack."
+  },
+  {
+    file: "05-servo-turret-mounting.jpeg",
+    title: "Servo Radar Turret Bonding",
+    caption: "Securing the SG90 micro servo pivot mount to the upper acrylic platform with hot glue, cleanly routing wires through chassis slots."
+  },
+  {
+    file: "06-dual-deck-chassis-profile.jpeg",
+    title: "Dual-Deck Chassis Structure",
+    caption: "Side profile showing the modular two-tier acrylic sandwich housing the battery compartment between decks, rear drive wheels, and front caster wheel."
+  },
+  {
+    file: "07-top-deck-wiring-and-switch.jpeg",
+    title: "Top Deck Electronics & Power Switch",
+    caption: "Overhead view showing the top acrylic deck with integrated master rocker switch, routed sensor cables, and front sonar radar module."
+  },
+  {
+    file: "08-assembled-car-front-view.jpeg",
+    title: "Front Radar Turret Integration",
+    caption: "Front perspective of the assembled obstacle avoidance car highlighting the elevated SG90 scanning turret and dual-tier chassis stance."
+  },
+  {
+    file: "09-team-engineering-session.jpeg",
+    title: "Engineering & Prototyping Team",
+    caption: "Project development team: Class 12th science students collaborating on hardware assembly, circuit wiring, and Arduino firmware calibration."
+  },
+  {
+    file: "10-team-prototype-milestone.jpeg",
+    title: "Pre-Exhibition Milestone Testing",
+    caption: "Team members showcasing the completed obstacle avoidance robotic prototype on the test platform ahead of the science exhibition."
+  }
 ];
 
 function initGallery() {
   const galleryGrid = document.getElementById('gallery-grid');
   if (!galleryGrid) return;
+  galleryGrid.innerHTML = '';
 
-  for (let i = 1; i <= 18; i++) {
+  galleryPhotos.forEach((item, index) => {
+    const num = index + 1;
     const card = document.createElement('div');
     card.className = 'gallery-card';
     card.tabIndex = 0;
     card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `Photo ${i}: ${galleryCaptions[i-1]}`);
+    card.setAttribute('aria-label', `Photo ${num}: ${item.title}`);
 
     card.innerHTML = `
       <div class="gallery-media">
-        <img class="gallery-img" id="gal-img-${i}" src="./Photo_Gallery/${i}.png" alt="Photo ${i}: ${galleryCaptions[i-1]}" loading="lazy">
-        <div class="neutral-placeholder" id="gal-ph-${i}" style="display: none;">
+        <img class="gallery-img" id="gal-img-${num}" src="./Photo_Gallery/${item.file}" alt="Photo ${num}: ${item.title}" loading="lazy">
+        <div class="neutral-placeholder" id="gal-ph-${num}" style="display: none;">
           <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             <circle cx="8.5" cy="8.5" r="1.5"></circle>
             <polyline points="21 15 16 10 5 21"></polyline>
           </svg>
-          <span class="placeholder-subtext">Photo ${i}</span>
+          <span class="placeholder-subtext">${item.file}</span>
         </div>
       </div>
       <div class="gallery-footer">
-        <span class="gallery-caption">${galleryCaptions[i-1]}</span>
-        <span class="gallery-idx">${i < 10 ? '0' + i : i}</span>
+        <div class="gallery-info">
+          <strong class="gallery-title">${item.title}</strong>
+          <span class="gallery-caption">${item.caption}</span>
+        </div>
+        <span class="gallery-idx">${num < 10 ? '0' + num : num}</span>
       </div>
     `;
 
-    const img = card.querySelector(`#gal-img-${i}`);
-    const ph = card.querySelector(`#gal-ph-${i}`);
+    const img = card.querySelector(`#gal-img-${num}`);
+    const ph = card.querySelector(`#gal-ph-${num}`);
 
     img.addEventListener('error', () => {
       img.style.display = 'none';
-      ph.style.display = 'flex';
+      if (ph) ph.style.display = 'flex';
     });
     img.addEventListener('load', () => {
       if (img.naturalWidth === 0) {
         img.style.display = 'none';
-        ph.style.display = 'flex';
+        if (ph) ph.style.display = 'flex';
       }
     });
 
-    card.addEventListener('click', () => openGalleryLightbox(i));
+    card.addEventListener('click', () => openGalleryLightbox(num));
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        openGalleryLightbox(i);
+        openGalleryLightbox(num);
       }
     });
 
     galleryGrid.appendChild(card);
-  }
+  });
 }
 
 let currentLightboxIndex = 1;
 
 function openGalleryLightbox(index) {
+  if (index < 1 || index > galleryPhotos.length) return;
   currentLightboxIndex = index;
+  const item = galleryPhotos[index - 1];
   const modal = document.getElementById('lightbox-modal');
   const title = document.getElementById('lightbox-title');
   const body = document.getElementById('lightbox-body');
 
   if (!modal || !body) return;
 
-  const caption = galleryCaptions[index - 1];
-  title.textContent = `Photo ${index}: ${caption}`;
+  title.textContent = `Photo ${index} of ${galleryPhotos.length}: ${item.title}`;
 
   body.innerHTML = `
-    <div style="text-align: center; max-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <img id="lb-active-img" src="./Photo_Gallery/${index}.png" alt="${caption}" style="max-height: 55vh; max-width: 100%; object-fit: contain; border-radius: 6px; border: 1px solid var(--border);">
+    <div style="text-align: center; max-height: 75vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <img id="lb-active-img" src="./Photo_Gallery/${item.file}" alt="${item.title}" style="max-height: 58vh; max-width: 100%; object-fit: contain; border-radius: 6px; border: 1px solid var(--border-strong);">
       <div id="lb-fallback" style="display: none; padding: 48px; background: var(--bg-subtle); border-radius: 8px; border: 1px solid var(--border-strong); width: 100%;">
-        <p style="font-size: 15px; color: var(--fg); font-weight: 500; margin-bottom: 4px;">Photo slot ${index}</p>
-        <p style="font-size: 14px; color: var(--fg-2);">${caption}</p>
-        <p style="font-size: 13px; color: var(--muted); margin-top: 12px; font-family: var(--font-mono);">Photo_Gallery/${index}.png</p>
+        <p style="font-size: 15px; color: var(--fg); font-weight: 500; margin-bottom: 4px;">${item.title}</p>
+        <p style="font-size: 14px; color: var(--fg-2);">${item.caption}</p>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 12px; font-family: var(--font-mono);">Photo_Gallery/${item.file}</p>
       </div>
-      <p style="margin-top: 16px; font-size: 14px; color: var(--fg-2);">${caption}</p>
+      <p style="margin-top: 14px; font-size: 15px; font-weight: 600; color: var(--fg);">${item.title}</p>
+      <p style="margin-top: 4px; font-size: 13px; color: var(--fg-2); max-width: 650px; line-height: 1.5;">${item.caption}</p>
     </div>
   `;
 
   const activeImg = document.getElementById('lb-active-img');
   const lbFallback = document.getElementById('lb-fallback');
-  activeImg.addEventListener('error', () => {
-    activeImg.style.display = 'none';
-    lbFallback.style.display = 'block';
-  });
-  activeImg.addEventListener('load', () => {
-    if (activeImg.naturalWidth === 0) {
+  if (activeImg && lbFallback) {
+    activeImg.addEventListener('error', () => {
       activeImg.style.display = 'none';
       lbFallback.style.display = 'block';
-    }
-  });
+    });
+    activeImg.addEventListener('load', () => {
+      if (activeImg.naturalWidth === 0) {
+        activeImg.style.display = 'none';
+        lbFallback.style.display = 'block';
+      }
+    });
+  }
 
   modal.classList.add('open');
 }
 
 function prevLightbox() {
-  currentLightboxIndex = currentLightboxIndex > 1 ? currentLightboxIndex - 1 : 18;
+  currentLightboxIndex = currentLightboxIndex > 1 ? currentLightboxIndex - 1 : galleryPhotos.length;
   openGalleryLightbox(currentLightboxIndex);
 }
 
 function nextLightbox() {
-  currentLightboxIndex = currentLightboxIndex < 18 ? currentLightboxIndex + 1 : 1;
+  currentLightboxIndex = currentLightboxIndex < galleryPhotos.length ? currentLightboxIndex + 1 : 1;
   openGalleryLightbox(currentLightboxIndex);
 }
 
@@ -348,6 +346,14 @@ const assetRegistry = [
     displayName: "Visitor takeaway handout",
     type: "PDF document",
     isInternal: true
+  },
+  {
+    id: "demovideo",
+    file: "Assets/demo.mp4",
+    downloadName: "Obstacle Avoidance Robot Demo.mp4",
+    displayName: "Full demonstration video",
+    type: "MP4 video",
+    isInternal: false
   }
 ];
 
@@ -423,7 +429,21 @@ function viewAsset(assetId) {
     renderPresentationAsset(asset, body);
   } else if (asset.id === 'handout') {
     renderHandoutAsset(asset, body);
+  } else if (asset.id === 'demovideo') {
+    renderVideoAsset(asset, body);
   }
+}
+
+function renderVideoAsset(asset, container) {
+  container.innerHTML = `
+    <div style="text-align: center;">
+      <video controls playsinline autoplay style="max-width: 100%; max-height: 65vh; border-radius: 8px; border: 1px solid var(--border-strong); background: #000;">
+        <source src="${asset.file}" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
+      <p style="margin-top: 14px; font-size: 13px; color: var(--muted); font-family: var(--font-mono);">${asset.downloadName}</p>
+    </div>
+  `;
 }
 
 function renderHtmlAsset(asset, container) {

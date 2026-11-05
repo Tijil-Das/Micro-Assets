@@ -470,17 +470,23 @@ img, video {
 
 .hero-media-wrapper {
   position: relative;
-  aspect-ratio: 16 / 9;
   background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px;
+  min-height: 280px;
 }
 
 .hero-car-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 70vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
 }
 
 /* Neutral Placeholder */
@@ -528,14 +534,21 @@ img, video {
 
 .video-player-box {
   position: relative;
-  aspect-ratio: 16 / 9;
   background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
 }
 
 .video-player-box video {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 720px;
+  max-height: 75vh;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
 
 .video-meta-bar {
@@ -604,25 +617,41 @@ img, video {
 .gallery-footer {
   padding: 14px 16px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
   background: var(--bg-subtle);
+  flex-grow: 1;
+}
+
+.gallery-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.gallery-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
 }
 
 .gallery-caption {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--fg);
-  text-align: center;
+  font-size: 12px;
+  color: var(--fg-2);
+  line-height: 1.45;
+  text-align: left;
 }
 
 .gallery-idx {
   font-size: 12px;
   font-family: var(--font-mono);
-  color: var(--muted);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
 }
 
 /* How It Works Specifications Table */
@@ -797,6 +826,20 @@ img, video {
   color: var(--fg-2);
   line-height: 1.6;
   text-align: left;
+  margin: 0;
+}
+
+.state-list {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+  color: var(--fg-2);
+  font-size: 14px;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.state-list li {
+  margin-bottom: 4px;
 }
 
 /* "Think about them" Section — Questions in Red, Answers in Green, Center Aligned */

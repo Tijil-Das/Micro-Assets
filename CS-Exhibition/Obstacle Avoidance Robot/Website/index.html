@@ -81,7 +81,7 @@
               <span class="frame-dot dot-green"></span>
             </div>
             <span>.car.png</span>
-            <span>16:9</span>
+            <span>Original Aspect Ratio</span>
           </div>
 
           <div class="hero-media-wrapper">
@@ -100,7 +100,7 @@
       </div>
     </section>
 
-    <!-- Demo video section (HLS chunked streaming in .mp4 folder) -->
+    <!-- Demo video section (Direct single MP4) -->
     <section class="section section-subtle" id="demo">
       <div class="container">
         <div class="section-header section-header-center">
@@ -117,27 +117,21 @@
               <span class="frame-dot dot-amber"></span>
               <span class="frame-dot dot-green"></span>
             </div>
-            <span>HLS stream: .mp4/index.m3u8</span>
-            <span>720p 24fps</span>
+            <span>demo.mp4 (4.5 MB)</span>
+            <span>Full Video</span>
           </div>
 
           <div class="video-player-box">
-            <video id="demo-video" controls playsinline preload="metadata">
-              <p>Your browser does not support HTML5 video.</p>
+            <video id="demo-video" controls playsinline preload="metadata" poster="./.car.png">
+              <source src="./demo.mp4" type="video/mp4">
+              <source src="./.mp4" type="video/mp4">
+              <p>Your browser does not support HTML5 video. You can <a href="./demo.mp4" download style="color: var(--accent); text-decoration: underline;">download the demo video directly</a>.</p>
             </video>
-
-            <div id="video-fallback-overlay" class="neutral-placeholder" style="display: none; position: absolute; inset: 0; background: var(--bg);">
-              <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-              <p class="placeholder-text">Demo video stream ready</p>
-              <span class="placeholder-subtext">Drop HLS stream chunks into Website/.mp4</span>
-            </div>
           </div>
 
           <div class="video-meta-bar">
-            <span>Adaptive bitrate HLS streaming</span>
-            <span style="font-family: var(--font-mono); color: var(--accent);">HC-SR04 sonar telemetry</span>
+            <span>Autonomous obstacle avoidance demonstration</span>
+            <span style="font-family: var(--font-mono); color: var(--accent);">Direct MP4 Playback</span>
           </div>
         </div>
       </div>
@@ -149,12 +143,12 @@
         <div class="section-header section-header-center">
           <h2 class="section-title">Photo gallery</h2>
           <p class="section-description">
-            18 photos documenting the chassis assembly, wiring, calibration, and live exhibition demonstration.
+            10 curated photos documenting the chassis assembly, electronics wiring, ultrasonic sensor calibration, and exhibition prototype testing.
           </p>
         </div>
 
         <div class="gallery-grid" id="gallery-grid">
-          <!-- 18 photo cards generated via app.js -->
+          <!-- Photo cards generated via app.js -->
         </div>
       </div>
     </section>
@@ -278,14 +272,14 @@
                   <span class="state-name">Condition 3: obstacle avoidance routine</span>
                   <span class="state-condition">0 &lt; distance &lt; 10 cm</span>
                 </div>
-                <p class="state-desc">
-                  1. Stop all motors (100 ms).<br>
-                  2. Sweep servo across 0° (right), 180° (left), and 90° (center) at 500 ms intervals.<br>
-                  3. Drive backward for 500 ms.<br>
-                  4. Stop for 100 ms.<br>
-                  5. Pivot turn left for 500 ms.<br>
-                  6. Re-evaluate distance in the next loop cycle.
-                </p>
+                <ol class="state-list">
+                  <li>Stop all motors (100 ms).</li>
+                  <li>Sweep servo across 0° (right), 180° (left), and 90° (center) at 500 ms intervals.</li>
+                  <li>Drive backward for 500 ms.</li>
+                  <li>Stop for 100 ms.</li>
+                  <li>Pivot turn left for 500 ms.</li>
+                  <li>Re-evaluate distance in the next loop cycle.</li>
+                </ol>
               </div>
             </div>
           </div>
