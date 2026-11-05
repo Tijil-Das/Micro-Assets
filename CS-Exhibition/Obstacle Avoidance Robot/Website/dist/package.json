@@ -1,9 +1,0 @@
-{
-  "name": "micro-assets",
-  "version": "1.0.0",
-  "description": "Micro Assets Repository",
-  "scripts": {
-    "build": "node build.js"
-  }
-}
-
