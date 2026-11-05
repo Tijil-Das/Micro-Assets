@@ -26,6 +26,7 @@
 | [**`Electron-Win11-Snap-Overlay/`**](./Electron-Win11-Snap-Overlay) | NPM Package / Native Addon | Native Windows 11 Snap Layout flyout overlay for frameless Electron apps with custom HTML title bars. | C++20, Win32, Node-API (N-API), TypeScript, Electron, React |
 | [**`CS-Exhibition/`**](./CS-Exhibition) | Robotics & Hardware | Standalone Arduino robotics projects (Obstacle Avoidance Robot, Traffic Light System) with diagrams, schematics, and sketches. | Arduino (C++), HC-SR04, L298N, SG90 Servo, LEDs |
 | [**`QR-Code-Generator/`**](./QR-Code-Generator) | CLI Utility | High-resolution QR code generator outputting vector SVG and 300 DPI JPG directly to disk. | Python 3, Pillow, qrcode |
+| [**`Batch-Image-Processor/`**](./Batch-Image-Processor) | Web Tool | Multi-file and folder batch image processor for color grading, tone adjustment, effects, resizing, and zip export. | HTML5, Canvas API, JSZip |
 | [**`My-Dev-Learnings/`**](./My-Dev-Learnings) | Knowledge Base | Structured engineering journal covering real-world mistakes, authentication traps, and patterns. | Markdown, Knowledge Base |
 
 ---
@@ -97,6 +98,11 @@
   ```bash
   python QR-Code-Generator/qr_generator.py "https://example.com" -o my_qr
   ```
+
+### 9. 🖼️ [Batch Image Processor](./Batch-Image-Processor)
+- **Path:** [`Batch-Image-Processor/batch-image-processor-v2.html`](./Batch-Image-Processor/batch-image-processor-v2.html) | [`Batch-Image-Processor/batch-image-processor.html`](./Batch-Image-Processor/batch-image-processor.html)
+- **What it does:** High-performance, client-side batch image processor supporting bulk file and entire folder imports. Provides fine-grained color adjustment (hue rotate, saturation, tint), tone grading (brightness, contrast, exposure), artistic effects (blur, sharpen, vignette, noise), instant transforms (grayscale, invert, sepia, rotate 90°, flip), and constraint-based resizing (fit width, height, or bounding box). Exports individually or bundled as a `.zip` archive across WebP, JPEG, and PNG formats.
+- **How to run:** Open `batch-image-processor-v2.html` (split-screen workspace) or `batch-image-processor.html` (classic flow) in any browser. Drag and drop images or select a folder to begin editing.
 
 ---
 

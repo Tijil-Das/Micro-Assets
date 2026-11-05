@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batch — image processor</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{
+    --ink:#171512;
+    --paper:#f4f1ea;
+    --panel:#ffffff;
+    --line:#e2ddd0;
+    --line-strong:#c9c2ae;
+    --accent:#3a6b5c;
+    --accent-ink:#e9f2ee;
+    --accent-dark:#254a3f;
+    --warn:#b5502f;
+    --mono: "IBM Plex Mono","SF Mono",Consolas,monospace;
+    --sans: "Inter","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Top bar ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--line-strong);
+    background:var(--paper);
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .brand .mark{
+    width:11px;height:11px;
+    background:var(--accent);
+    display:inline-block;
+    transform:rotate(45deg);
+  }
+  .brand h1{
+    font-size:16px;
+    margin:0;
+    letter-spacing:0.02em;
+    font-weight:600;
+  }
+  .brand .sub{
+    font-family:var(--mono);
+    font-size:11px;
+    color:#7a7568;
+    letter-spacing:0.03em;
+  }
+  header .count{
+    font-family:var(--mono);
+    font-size:12px;
+    color:#7a7568;
+  }
+
+  /* ---------- Layout ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns:300px 1fr;
+    min-height:calc(100vh - 58px);
+  }
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Sidebar / controls ---------- */
+  aside{
+    border-right:1px solid var(--line-strong);
+    padding:20px;
+    background:var(--paper);
+    overflow-y:auto;
+  }
+  .section{
+    margin-bottom:22px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+  }
+  .section:last-child{border-bottom:none;}
+  .section h2{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:#8a8474;
+    margin:0 0 12px 0;
+    font-weight:600;
+  }
+
+  .drop{
+    border:1.5px dashed var(--line-strong);
+    border-radius:2px;
+    padding:22px 14px;
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+    font-size:12.5px;
+    color:#666;
+  }
+  .drop:hover, .drop.drag{
+    border-color:var(--accent);
+    background:var(--accent-ink);
+  }
+  .drop strong{display:block;color:var(--ink);font-size:13px;margin-bottom:4px;}
+  input[type=file]{display:none;}
+
+  .filerow{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+  }
+  .filerow button{flex:1;}
+
+  button{
+    font-family:var(--sans);
+    font-size:12.5px;
+    padding:8px 10px;
+    background:var(--panel);
+    border:1px solid var(--line-strong);
+    color:var(--ink);
+    cursor:pointer;
+    border-radius:2px;
+    transition:background .12s, border-color .12s, transform .05s;
+  }
+  button:hover{border-color:var(--accent);}
+  button:active{transform:scale(0.98);}
+  button.primary{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+    font-weight:600;
+  }
+  button.primary:hover{background:var(--accent-dark);}
+  button:disabled{opacity:0.4;cursor:not-allowed;}
+  button.block{width:100%;margin-top:6px;}
+  button.ghost{background:transparent;}
+
+  .ctrl{margin-bottom:16px;}
+  .ctrl-label{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    margin-bottom:5px;
+    color:#4a463c;
+  }
+  .ctrl-label span.val{
+    font-family:var(--mono);
+    color:var(--accent-dark);
+    font-weight:600;
+  }
+  input[type=range]{
+    width:100%;
+    -webkit-appearance:none;
+    height:2px;
+    background:var(--line-strong);
+    outline:none;
+    margin:2px 0;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:13px;height:13px;
+    border-radius:50%;
+    background:var(--accent);
+    cursor:pointer;
+    border:2px solid var(--paper);
+    box-shadow:0 0 0 1px var(--accent);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:13px;height:13px;
+    border-radius:50%;
+    background:var(--accent);
+    cursor:pointer;
+    border:2px solid var(--paper);
+    box-shadow:0 0 0 1px var(--accent);
+  }
+
+  .togglegrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+  }
+  .togglegrid button{font-size:11.5px;padding:7px 6px;}
+  .togglegrid button.on{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+  }
+
+  select{
+    width:100%;
+    padding:7px 8px;
+    font-family:var(--sans);
+    font-size:12.5px;
+    border:1px solid var(--line-strong);
+    background:var(--panel);
+    color:var(--ink);
+    border-radius:2px;
+  }
+
+  .fmtrow{display:flex;gap:8px;align-items:center;}
+  .fmtrow select{flex:1;}
+
+  .exportinfo{
+    font-family:var(--mono);
+    font-size:11px;
+    color:#8a8474;
+    margin-top:8px;
+    line-height:1.5;
+  }
+
+  /* ---------- Main / grid ---------- */
+  main{
+    padding:20px 26px 60px;
+  }
+  .empty{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:60vh;
+    color:#8a8474;
+    text-align:center;
+  }
+  .empty .glyph{
+    font-size:36px;
+    margin-bottom:10px;
+    opacity:0.5;
+  }
+  .empty h3{font-size:15px;color:var(--ink);margin:0 0 6px;font-weight:600;}
+  .empty p{font-size:12.5px;max-width:320px;margin:0;}
+
+  .toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+    font-size:12px;
+  }
+  .toolbar .status{
+    font-family:var(--mono);
+    color:#7a7568;
+  }
+  .toolbar .actions{display:flex;gap:8px;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:2px;
+    overflow:hidden;
+    position:relative;
+  }
+  .card .thumbwrap{
+    aspect-ratio:1/1;
+    background:
+      linear-gradient(45deg, #eee 25%, transparent 25%),
+      linear-gradient(-45deg, #eee 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #eee 75%),
+      linear-gradient(-45deg, transparent 75%, #eee 75%);
+    background-size:16px 16px;
+    background-position:0 0, 0 8px, 8px -8px, -8px 0px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .card canvas{
+    max-width:100%;
+    max-height:100%;
+    display:block;
+  }
+  .card .meta{
+    padding:8px 10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:6px;
+  }
+  .card .name{
+    font-size:11px;
+    font-family:var(--mono);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    color:#4a463c;
+  }
+  .card .remove{
+    border:none;
+    background:none;
+    color:#b5502f;
+    cursor:pointer;
+    font-size:14px;
+    padding:0 2px;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .card .remove:hover{color:#7a2f18;}
+  .card .dims{
+    font-size:10px;
+    font-family:var(--mono);
+    color:#9b9585;
+    padding:0 10px 8px;
+  }
+
+  .toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%) translateY(0);
+    background:var(--ink);
+    color:#fff;
+    padding:10px 18px;
+    font-size:12.5px;
+    border-radius:3px;
+    z-index:50;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s, transform .2s;
+  }
+  .toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(-6px);
+  }
+
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:5px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="mark"></span>
+    <h1>Batch</h1>
+    <span class="sub">image processor</span>
+  </div>
+  <div class="count" id="headerCount">0 images loaded</div>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="section">
+      <h2>Import</h2>
+      <div class="drop" id="dropZone">
+        <strong>Drop images or a folder</strong>
+        or click to browse
+      </div>
+      <div class="filerow">
+        <button id="pickFiles">Choose files</button>
+        <button id="pickFolder">Choose folder</button>
+      </div>
+      <input type="file" id="fileInput" multiple accept="image/*">
+      <input type="file" id="folderInput" webkitdirectory directory multiple>
+    </div>
+
+    <div class="section">
+      <h2>Adjust — color</h2>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Hue rotate</span><span class="val" id="v-hue">0°</span></div>
+        <input type="range" id="hue" min="-180" max="180" step="1" value="0">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Saturation</span><span class="val" id="v-sat">100%</span></div>
+        <input type="range" id="sat" min="0" max="200" step="1" value="100">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Tint (r/g/b)</span><span class="val" id="v-tint">#00000000</span></div>
+        <input type="range" id="tintColor" min="0" max="360" step="1" value="0" style="margin-bottom:4px;">
+        <div class="ctrl-label"><span>Tint strength</span><span class="val" id="v-tintStr">0%</span></div>
+        <input type="range" id="tintStrength" min="0" max="100" step="1" value="0">
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Adjust — tone</h2>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Brightness</span><span class="val" id="v-bri">100%</span></div>
+        <input type="range" id="bri" min="0" max="200" step="1" value="100">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Contrast</span><span class="val" id="v-con">100%</span></div>
+        <input type="range" id="con" min="0" max="200" step="1" value="100">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Exposure</span><span class="val" id="v-exp">0</span></div>
+        <input type="range" id="exp" min="-100" max="100" step="1" value="0">
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Effects</h2>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Blur</span><span class="val" id="v-blur">0px</span></div>
+        <input type="range" id="blur" min="0" max="20" step="0.5" value="0">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Sharpen</span><span class="val" id="v-sharp">0</span></div>
+        <input type="range" id="sharp" min="0" max="100" step="1" value="0">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Vignette</span><span class="val" id="v-vig">0%</span></div>
+        <input type="range" id="vig" min="0" max="100" step="1" value="0">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label"><span>Noise</span><span class="val" id="v-noise">0%</span></div>
+        <input type="range" id="noise" min="0" max="100" step="1" value="0">
+      </div>
+      <div class="togglegrid">
+        <button id="tg-gray" data-toggle="grayscale">Grayscale</button>
+        <button id="tg-inv" data-toggle="invert">Invert</button>
+        <button id="tg-sepia" data-toggle="sepia">Sepia</button>
+        <button id="tg-flipH" data-toggle="flipH">Flip H</button>
+        <button id="tg-flipV" data-toggle="flipV">Flip V</button>
+        <button id="tg-rot" data-toggle="rot90">Rotate 90°</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Resize</h2>
+      <div class="fmtrow" style="margin-bottom:10px;">
+        <select id="resizeMode">
+          <option value="none">Original size</option>
+          <option value="width">Fit width</option>
+          <option value="height">Fit height</option>
+          <option value="box">Fit inside box</option>
+        </select>
+        <input type="range" id="resizeVal" min="50" max="4000" step="10" value="1200" style="display:none;">
+      </div>
+      <div class="ctrl-label" id="resizeValLabel" style="display:none;"><span>Max dimension</span><span class="val" id="v-resize">1200px</span></div>
+    </div>
+
+    <div class="section">
+      <h2>Reset</h2>
+      <button class="block" id="resetBtn">Reset all adjustments</button>
+    </div>
+
+    <div class="section">
+      <h2>Export</h2>
+      <div class="fmtrow">
+        <select id="fmtSelect">
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPEG</option>
+          <option value="image/webp">WEBP</option>
+        </select>
+        <input type="range" id="qualitySlider" min="10" max="100" step="1" value="92" title="Quality">
+      </div>
+      <div class="exportinfo" id="qualityInfo">Quality 92% — filenames preserved on export.</div>
+      <button class="primary block" id="downloadZip">Download all as .zip</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="toolbar" id="toolbar" style="display:none;">
+      <div class="status" id="statusText">0 images</div>
+      <div class="actions">
+        <button id="clearAll" class="ghost">Clear all</button>
+      </div>
+    </div>
+
+    <div class="empty" id="emptyState">
+      <div class="glyph">◇</div>
+      <h3>No images yet</h3>
+      <p>Drop a folder or a batch of images anywhere on this page. Every effect you tune in the sidebar applies live to all of them at once.</p>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const state = {
+    images: [], // {id, name, img(HTMLImageElement), canvas, w, h}
+    toggles: { grayscale:false, invert:false, sepia:false, flipH:false, flipV:false, rot90:false },
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const grid = $('grid');
+  const emptyState = $('emptyState');
+  const toolbar = $('toolbar');
+  const headerCount = $('headerCount');
+  const statusText = $('statusText');
+
+  let idCounter = 0;
+
+  // ---------- File intake ----------
+  const dropZone = $('dropZone');
+  const fileInput = $('fileInput');
+  const folderInput = $('folderInput');
+
+  $('pickFiles').addEventListener('click', () => fileInput.click());
+  $('pickFolder').addEventListener('click', () => folderInput.click());
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', e => handleFiles(e.target.files));
+  folderInput.addEventListener('change', e => handleFiles(e.target.files));
+
+  ['dragenter','dragover'].forEach(evt => {
+    dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.add('drag'); });
+    document.body.addEventListener(evt, e => e.preventDefault());
+  });
+  ['dragleave','drop'].forEach(evt => {
+    dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.remove('drag'); });
+  });
+  document.body.addEventListener('drop', e => {
+    e.preventDefault();
+    const items = e.dataTransfer.items;
+    if (items && items.length && items[0].webkitGetAsEntry) {
+      const entries = [];
+      for (let i=0;i<items.length;i++){
+        const entry = items[i].webkitGetAsEntry();
+        if (entry) entries.push(entry);
+      }
+      if (entries.length){
+        traverseEntries(entries);
+        return;
+      }
+    }
+    handleFiles(e.dataTransfer.files);
+  });
+
+  function traverseEntries(entries){
+    const files = [];
+    let pending = 0;
+    function walk(entry){
+      if (entry.isFile){
+        pending++;
+        entry.file(f => { files.push(f); pending--; maybeFinish(); });
+      } else if (entry.isDirectory){
+        pending++;
+        const reader = entry.createReader();
+        reader.readEntries(children => {
+          children.forEach(walk);
+          pending--; maybeFinish();
+        });
+      }
+    }
+    function maybeFinish(){
+      if (pending === 0) handleFiles(files);
+    }
+    entries.forEach(walk);
+  }
+
+  function handleFiles(fileList){
+    const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+    if (!files.length) return;
+    let loaded = 0;
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const id = 'img_' + (idCounter++);
+          state.images.push({
+            id, name: file.name, img,
+            w: img.naturalWidth, h: img.naturalHeight
+          });
+          loaded++;
+          renderGrid();
+          if (loaded === files.length) showToast(files.length + ' image' + (files.length>1?'s':'') + ' added');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  $('clearAll').addEventListener('click', () => {
+    state.images = [];
+    renderGrid();
+  });
+
+  // ---------- Controls wiring ----------
+  const controls = ['hue','sat','tintColor','tintStrength','bri','con','exp','blur','sharp','vig','noise'];
+  const labelMap = {
+    hue: v => v + '°',
+    sat: v => v + '%',
+    tintColor: v => hslToHexLabel(v),
+    tintStrength: v => v + '%',
+    bri: v => v + '%',
+    con: v => v + '%',
+    exp: v => v,
+    blur: v => v + 'px',
+    sharp: v => v,
+    vig: v => v + '%',
+    noise: v => v + '%',
+  };
+  const outMap = {hue:'v-hue',sat:'v-sat',tintColor:'v-tint',tintStrength:'v-tintStr',bri:'v-bri',con:'v-con',exp:'v-exp',blur:'v-blur',sharp:'v-sharp',vig:'v-vig',noise:'v-noise'};
+
+  function hslToHexLabel(hueVal){
+    return 'hue ' + hueVal + '°';
+  }
+
+  controls.forEach(id => {
+    const el = $(id);
+    el.addEventListener('input', () => {
+      if (id === 'tintColor') { $(outMap['tintColor']).textContent = hslToHexLabel(el.value); }
+      else $(outMap[id]).textContent = labelMap[id](el.value);
+      scheduleRender();
+    });
+  });
+
+  document.querySelectorAll('[data-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.toggle;
+      state.toggles[key] = !state.toggles[key];
+      btn.classList.toggle('on', state.toggles[key]);
+      scheduleRender();
+    });
+  });
+
+  const resizeMode = $('resizeMode');
+  const resizeVal = $('resizeVal');
+  const resizeValLabel = $('resizeValLabel');
+  resizeMode.addEventListener('change', () => {
+    const show = resizeMode.value !== 'none';
+    resizeVal.style.display = show ? 'block' : 'none';
+    resizeValLabel.style.display = show ? 'flex' : 'none';
+    scheduleRender();
+  });
+  resizeVal.addEventListener('input', () => {
+    $('v-resize').textContent = resizeVal.value + 'px';
+    scheduleRender();
+  });
+
+  $('resetBtn').addEventListener('click', () => {
+    controls.forEach(id => {
+      const el = $(id);
+      const defaults = {hue:0,sat:100,tintColor:0,tintStrength:0,bri:100,con:100,exp:0,blur:0,sharp:0,vig:0,noise:0};
+      el.value = defaults[id];
+      if (id==='tintColor') $(outMap[id]).textContent = hslToHexLabel(el.value);
+      else $(outMap[id]).textContent = labelMap[id](el.value);
+    });
+    Object.keys(state.toggles).forEach(k => state.toggles[k] = false);
+    document.querySelectorAll('[data-toggle]').forEach(b => b.classList.remove('on'));
+    resizeMode.value = 'none';
+    resizeVal.style.display = 'none';
+    resizeValLabel.style.display = 'none';
+    scheduleRender();
+  });
+
+  const qualitySlider = $('qualitySlider');
+  const fmtSelect = $('fmtSelect');
+  const qualityInfo = $('qualityInfo');
+  function updateQualityInfo(){
+    const fmt = fmtSelect.value;
+    if (fmt === 'image/png'){
+      qualitySlider.disabled = true;
+      qualityInfo.textContent = 'PNG is lossless — quality slider not applicable.';
+    } else {
+      qualitySlider.disabled = false;
+      qualityInfo.textContent = 'Quality ' + qualitySlider.value + '% — filenames preserved on export.';
+    }
+  }
+  qualitySlider.addEventListener('input', updateQualityInfo);
+  fmtSelect.addEventListener('change', updateQualityInfo);
+  updateQualityInfo();
+
+  // ---------- Rendering pipeline ----------
+  let renderQueued = false;
+  function scheduleRender(){
+    if (renderQueued) return;
+    renderQueued = true;
+    requestAnimationFrame(() => { renderQueued = false; renderGrid(); });
+  }
+
+  function getParams(){
+    return {
+      hue: parseFloat($('hue').value),
+      sat: parseFloat($('sat').value),
+      tintColor: parseFloat($('tintColor').value),
+      tintStrength: parseFloat($('tintStrength').value),
+      bri: parseFloat($('bri').value),
+      con: parseFloat($('con').value),
+      exp: parseFloat($('exp').value),
+      blur: parseFloat($('blur').value),
+      sharp: parseFloat($('sharp').value),
+      vig: parseFloat($('vig').value),
+      noise: parseFloat($('noise').value),
+      resizeMode: resizeMode.value,
+      resizeVal: parseFloat(resizeVal.value),
+      toggles: {...state.toggles}
+    };
+  }
+
+  function hslToRgb(h, s, l){
+    h = h/360; s = s/100; l = l/100;
+    let r,g,b;
+    if (s===0){ r=g=b=l; }
+    else{
+      const hue2rgb = (p,q,t) => {
+        if (t<0) t+=1; if (t>1) t-=1;
+        if (t<1/6) return p+(q-p)*6*t;
+        if (t<1/2) return q;
+        if (t<2/3) return p+(q-p)*(2/3-t)*6;
+        return p;
+      };
+      const q = l < 0.5 ? l*(1+s) : l+s-l*s;
+      const p = 2*l-q;
+      r = hue2rgb(p,q,h+1/3);
+      g = hue2rgb(p,q,h);
+      b = hue2rgb(p,q,h-1/3);
+    }
+    return [Math.round(r*255), Math.round(g*255), Math.round(b*255)];
+  }
+
+  function computeOutputSize(w, h, params){
+    let outW = w, outH = h;
+    if (params.toggles.rot90) { outW = h; outH = w; }
+    if (params.resizeMode === 'width'){
+      const scale = params.resizeVal / outW;
+      outW = params.resizeVal; outH = Math.round(outH * scale);
+    } else if (params.resizeMode === 'height'){
+      const scale = params.resizeVal / outH;
+      outH = params.resizeVal; outW = Math.round(outW * scale);
+    } else if (params.resizeMode === 'box'){
+      const scale = Math.min(params.resizeVal / outW, params.resizeVal / outH, 1);
+      outW = Math.round(outW * scale); outH = Math.round(outH * scale);
+    }
+    return {outW, outH};
+  }
+
+  function processImage(item, params, targetCanvas){
+    const { img, w, h } = item;
+    const { outW, outH } = computeOutputSize(w, h, params);
+
+    // Draw source with orientation transforms into an intermediate canvas at source res (post-rotate)
+    const srcRotW = params.toggles.rot90 ? h : w;
+    const srcRotH = params.toggles.rot90 ? w : h;
+
+    const work = document.createElement('canvas');
+    work.width = srcRotW;
+    work.height = srcRotH;
+    const wctx = work.getContext('2d');
+
+    wctx.save();
+    wctx.translate(srcRotW/2, srcRotH/2);
+    let sx = params.toggles.flipH ? -1 : 1;
+    let sy = params.toggles.flipV ? -1 : 1;
+    wctx.scale(sx, sy);
+    if (params.toggles.rot90) wctx.rotate(Math.PI/2);
+
+    // CSS filter string for the fast built-ins
+    const filters = [];
+    filters.push('brightness(' + (params.bri/100) + ')');
+    filters.push('contrast(' + (params.con/100) + ')');
+    filters.push('saturate(' + (params.sat/100) + ')');
+    filters.push('hue-rotate(' + params.hue + 'deg)');
+    if (params.blur > 0) filters.push('blur(' + params.blur + 'px)');
+    if (params.toggles.grayscale) filters.push('grayscale(1)');
+    if (params.toggles.invert) filters.push('invert(1)');
+    if (params.toggles.sepia) filters.push('sepia(1)');
+    wctx.filter = filters.join(' ');
+
+    wctx.drawImage(img, -w/2, -h/2, w, h);
+    wctx.restore();
+
+    // Pixel-level pass: exposure, tint, vignette, noise, sharpen
+    const needsPixelPass = params.exp !== 0 || params.tintStrength > 0 || params.vig > 0 || params.noise > 0 || params.sharp > 0;
+    if (needsPixelPass){
+      const idata = wctx.getImageData(0,0,srcRotW,srcRotH);
+      const d = idata.data;
+      const expAdj = params.exp * 2.55;
+      const [tr,tg,tb] = hslToRgb(params.tintColor, 70, 50);
+      const tintAmt = params.tintStrength/100;
+      const cx = srcRotW/2, cy = srcRotH/2;
+      const maxDist = Math.sqrt(cx*cx+cy*cy);
+      const vigAmt = params.vig/100;
+      const noiseAmt = params.noise/100 * 60;
+
+      for (let i=0; i<d.length; i+=4){
+        let r=d[i], g=d[i+1], b=d[i+2];
+        if (expAdj !== 0){ r+=expAdj; g+=expAdj; b+=expAdj; }
+        if (tintAmt > 0){
+          r = r*(1-tintAmt) + tr*tintAmt;
+          g = g*(1-tintAmt) + tg*tintAmt;
+          b = b*(1-tintAmt) + tb*tintAmt;
+        }
+        if (vigAmt > 0){
+          const pi = (i/4);
+          const px = pi % srcRotW, py = Math.floor(pi / srcRotW);
+          const dist = Math.sqrt((px-cx)*(px-cx)+(py-cy)*(py-cy)) / maxDist;
+          const shade = 1 - Math.pow(dist,2) * vigAmt;
+          r*=shade; g*=shade; b*=shade;
+        }
+        if (noiseAmt > 0){
+          const n = (Math.random()-0.5) * noiseAmt;
+          r+=n; g+=n; b+=n;
+        }
+        d[i] = r<0?0:r>255?255:r;
+        d[i+1] = g<0?0:g>255?255:g;
+        d[i+2] = b<0?0:b>255?255:b;
+      }
+      wctx.putImageData(idata, 0, 0);
+
+      if (params.sharp > 0){
+        applySharpen(wctx, srcRotW, srcRotH, params.sharp/100);
+      }
+    }
+
+    // Final resize blit into target canvas
+    targetCanvas.width = outW;
+    targetCanvas.height = outH;
+    const tctx = targetCanvas.getContext('2d');
+    tctx.imageSmoothingEnabled = true;
+    tctx.imageSmoothingQuality = 'high';
+    tctx.drawImage(work, 0, 0, srcRotW, srcRotH, 0, 0, outW, outH);
+  }
+
+  function applySharpen(ctx, w, h, amount){
+    const src = ctx.getImageData(0,0,w,h);
+    const sd = src.data;
+    const out = ctx.createImageData(w,h);
+    const od = out.data;
+    const k = [0,-1,0,-1,5,-1,0,-1,0];
+    const mix = amount;
+    for (let y=0;y<h;y++){
+      for (let x=0;x<w;x++){
+        const idx = (y*w+x)*4;
+        if (x===0||y===0||x===w-1||y===h-1){
+          od[idx]=sd[idx]; od[idx+1]=sd[idx+1]; od[idx+2]=sd[idx+2]; od[idx+3]=sd[idx+3];
+          continue;
+        }
+        for (let c=0;c<3;c++){
+          let sum=0, ki=0;
+          for (let ky=-1;ky<=1;ky++){
+            for (let kx=-1;kx<=1;kx++){
+              const nidx = ((y+ky)*w+(x+kx))*4+c;
+              sum += sd[nidx]*k[ki++];
+            }
+          }
+          const orig = sd[idx+c];
+          const sharpened = sum<0?0:sum>255?255:sum;
+          od[idx+c] = orig*(1-mix) + sharpened*mix;
+        }
+        od[idx+3]=sd[idx+3];
+      }
+    }
+    ctx.putImageData(out,0,0);
+  }
+
+  // ---------- Grid rendering ----------
+  function renderGrid(){
+    const has = state.images.length > 0;
+    emptyState.style.display = has ? 'none' : 'flex';
+    toolbar.style.display = has ? 'flex' : 'none';
+    headerCount.textContent = state.images.length + ' image' + (state.images.length===1?'':'s') + ' loaded';
+    statusText.textContent = state.images.length + ' image' + (state.images.length===1?'':'s') + ' — effects applied live';
+
+    const params = getParams();
+
+    // Reconcile DOM: remove cards for deleted images, add cards for new ones
+    const existingIds = new Set(Array.from(grid.children).map(c => c.dataset.id));
+    const currentIds = new Set(state.images.map(i => i.id));
+
+    existingIds.forEach(id => {
+      if (!currentIds.has(id)){
+        const el = grid.querySelector('[data-id="'+id+'"]');
+        if (el) el.remove();
+      }
+    });
+
+    state.images.forEach(item => {
+      let card = grid.querySelector('[data-id="'+item.id+'"]');
+      if (!card){
+        card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.id = item.id;
+        card.innerHTML = '<div class="thumbwrap"><canvas></canvas></div>' +
+          '<div class="meta"><span class="name"></span><button class="remove" title="Remove">×</button></div>' +
+          '<div class="dims"></div>';
+        card.querySelector('.remove').addEventListener('click', () => {
+          state.images = state.images.filter(i => i.id !== item.id);
+          renderGrid();
+        });
+        grid.appendChild(card);
+      }
+      card.querySelector('.name').textContent = item.name;
+      card.querySelector('.name').title = item.name;
+      const canvas = card.querySelector('canvas');
+      processImage(item, params, canvas);
+      card.querySelector('.dims').textContent = canvas.width + ' × ' + canvas.height;
+    });
+  }
+
+  // ---------- Export ----------
+  function stripExt(name){
+    const idx = name.lastIndexOf('.');
+    return idx > 0 ? name.substring(0, idx) : name;
+  }
+  function extFor(mime){
+    return mime === 'image/png' ? 'png' : mime === 'image/webp' ? 'webp' : 'jpg';
+  }
+
+  $('downloadZip').addEventListener('click', async () => {
+    if (!state.images.length){ showToast('Add some images first'); return; }
+    const btn = $('downloadZip');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Zipping…';
+
+    try {
+      const zip = new JSZip();
+      const params = getParams();
+      const mime = fmtSelect.value;
+      const quality = parseFloat(qualitySlider.value) / 100;
+      const usedNames = new Set();
+
+      for (const item of state.images){
+        const canvas = document.createElement('canvas');
+        processImage(item, params, canvas);
+        const blob = await new Promise(res => canvas.toBlob(res, mime, mime === 'image/png' ? undefined : quality));
+        let base = stripExt(item.name);
+        let ext = extFor(mime);
+        let filename = base + '.' + ext;
+        let n = 1;
+        while (usedNames.has(filename)){
+          filename = base + '_' + n + '.' + ext;
+          n++;
+        }
+        usedNames.add(filename);
+        zip.file(filename, blob);
+      }
+
+      const content = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'batch-processed-images.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      showToast('Zip downloaded — ' + state.images.length + ' images');
+    } catch (err){
+      console.error(err);
+      showToast('Something went wrong creating the zip');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
+
+  // ---------- Toast ----------
+  let toastTimer = null;
+  function showToast(msg){
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  renderGrid();
+})();
+</script>
+</body>
+</html>
