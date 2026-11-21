@@ -28,7 +28,7 @@ Everything runs 100% locally in your browser. Your exported archives and private
 ## File Structure
 
 ```
-Claude-Data-Renderer/
+Claude Data Renderer/
 ├── claude-archive-viewer.html   # Standalone web app (single file)
 ├── LICENSE                      # MIT License
 └── README.md

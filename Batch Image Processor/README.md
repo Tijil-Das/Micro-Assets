@@ -35,7 +35,7 @@ python -m http.server 8080
 # Node (npx)
 npx serve .
 ```
-Navigate to `http://localhost:8080/Batch-Image-Processor/batch-image-processor-v2.html`.
+Navigate to `http://localhost:8080/Batch%20Image%20Processor/batch-image-processor-v2.html`.
 
 ---
 
@@ -51,7 +51,7 @@ Navigate to `http://localhost:8080/Batch-Image-Processor/batch-image-processor-v
 ## 📁 File Structure
 
 ```
-Batch-Image-Processor/
+Batch Image Processor/
 ├── batch-image-processor-v2.html   # Modern split-pane workspace (recommended)
 ├── batch-image-processor.html      # Classic layout
 ├── LICENSE                         # MIT License

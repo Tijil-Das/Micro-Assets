@@ -73,7 +73,7 @@ export default {
     // 4. GitHub Configuration
     const owner = env.GITHUB_REPO_OWNER || "Tijil-Das";
     const repo = env.GITHUB_REPO_NAME || "Micro-Assets";
-    const path = env.GITHUB_FILE_PATH || "CS-Exhibition/Obstacle Avoidance Robot/Website/Data/feedbacks.json";
+    const path = env.GITHUB_FILE_PATH || "CS Exhibition/Obstacle Avoidance Robot/Website/Data/feedbacks.json";
     const branch = env.GITHUB_BRANCH || "main";
     const githubToken = env.GITHUB_TOKEN;
 

@@ -19,39 +19,39 @@
 
 | Directory | Type | Description | Tech Stack |
 |---|---|---|---|
-| [**`Claude-Data-Renderer/`**](./Claude-Data-Renderer) | Web Tool | Local viewer to render, search, and browse exported Claude chat archives (`.zip` / `.json`). | HTML5, CSS3, JSZip, Local APIs |
-| [**`SVG-Colour-Inverter/`**](./SVG-Colour-Inverter) | Web Tool | Invert all colours in any SVG with guaranteed zero structural DOM mutations and live comparison preview. | HTML5, DOMParser, XMLSerializer |
-| [**`Image-Corner-Rounder/`**](./Image-Corner-Rounder) | Web Tool | Real-time image corner rounding and clipping with multi-image support, live preview, and PNG export. | HTML5, Canvas API |
-| [**`Check-Max-File-Size/`**](./Check-Max-File-Size) | CLI Utility | Recursive Windows batch script to scan any folder and pinpoint the largest file and exact byte size. | Windows CMD / Batch |
-| [**`Electron-Win11-Snap-Overlay/`**](./Electron-Win11-Snap-Overlay) | NPM Package / Native Addon | Native Windows 11 Snap Layout flyout overlay for frameless Electron apps with custom HTML title bars. | C++20, Win32, Node-API (N-API), TypeScript, Electron, React |
-| [**`CS-Exhibition/`**](./CS-Exhibition) | Robotics & Hardware | Standalone Arduino robotics projects (Obstacle Avoidance Robot, Traffic Light System) with diagrams, schematics, and sketches. | Arduino (C++), HC-SR04, L298N, SG90 Servo, LEDs |
-| [**`QR-Code-Generator/`**](./QR-Code-Generator) | CLI Utility | High-resolution QR code generator outputting vector SVG and 300 DPI JPG directly to disk. | Python 3, Pillow, qrcode |
-| [**`Batch-Image-Processor/`**](./Batch-Image-Processor) | Web Tool | Multi-file and folder batch image processor for color grading, tone adjustment, effects, resizing, and zip export. | HTML5, Canvas API, JSZip |
+| [**`Claude Data Renderer/`**](./Claude%20Data%20Renderer) | Web Tool | Local viewer to render, search, and browse exported Claude chat archives (`.zip` / `.json`). | HTML5, CSS3, JSZip, Local APIs |
+| [**`SVG Colour Inverter/`**](./SVG%20Colour%20Inverter) | Web Tool | Invert all colours in any SVG with guaranteed zero structural DOM mutations and live comparison preview. | HTML5, DOMParser, XMLSerializer |
+| [**`Image Corner Rounder/`**](./Image%20Corner%20Rounder) | Web Tool | Real-time image corner rounding and clipping with multi-image support, live preview, and PNG export. | HTML5, Canvas API |
+| [**`Check Max File Size/`**](./Check%20Max%20File%20Size) | CLI Utility | Recursive Windows batch script to scan any folder and pinpoint the largest file and exact byte size. | Windows CMD / Batch |
+| [**`Electron Win11 Snap Overlay/`**](./Electron%20Win11%20Snap%20Overlay) | NPM Package / Native Addon | Native Windows 11 Snap Layout flyout overlay for frameless Electron apps with custom HTML title bars. | C++20, Win32, Node-API (N-API), TypeScript, Electron, React |
+| [**`CS Exhibition/`**](./CS%20Exhibition) | Robotics & Hardware | Standalone Arduino robotics projects (Obstacle Avoidance Robot, Traffic Light System) with diagrams, schematics, and sketches. | Arduino (C++), HC-SR04, L298N, SG90 Servo, LEDs |
+| [**`QR Code Generator/`**](./QR%20Code%20Generator) | CLI Utility | High-resolution QR code generator outputting vector SVG and 300 DPI JPG directly to disk. | Python 3, Pillow, qrcode |
+| [**`Batch Image Processor/`**](./Batch%20Image%20Processor) | Web Tool | Multi-file and folder batch image processor for color grading, tone adjustment, effects, resizing, and zip export. | HTML5, Canvas API, JSZip |
 | [**`SVGs/`**](./SVGs) | Vector Assets & Tool | Collection of clean UI vector icons, circuit wiring schematics, and interactive Wireboard canvas tools. | SVG, HTML5, Canvas |
 | [**`Skills/`**](./Skills) | Skills & Guidelines | Codified design standards, anti-pattern rules ("AI tells"), token systems, and interaction guidelines for AI agents. | Markdown, Design Standards |
-| [**`My-Dev-Learnings/`**](./My-Dev-Learnings) | Knowledge Base | Structured engineering journal covering real-world mistakes, authentication traps, and patterns. | Markdown, Knowledge Base |
+| [**`My Dev Learnings/`**](./My%20Dev%20Learnings) | Knowledge Base | Structured engineering journal covering real-world mistakes, authentication traps, and patterns. | Markdown, Knowledge Base |
 
 ---
 
 ## 🚀 Tool Details & Quick Start
 
-### 1. 💬 [Claude Data Renderer](./Claude-Data-Renderer)
-- **Path:** [`Claude-Data-Renderer/claude-archive-viewer.html`](./Claude-Data-Renderer/claude-archive-viewer.html)
+### 1. 💬 [Claude Data Renderer](./Claude%20Data%20Renderer)
+- **Path:** [`Claude Data Renderer/claude-archive-viewer.html`](./Claude%20Data%20Renderer/claude-archive-viewer.html)
 - **What it does:** Renders exported Claude AI chats in a clean, authentic Claude UI with dark and light themes, in-memory search, conversation jumping, and code highlighting.
 - **How to run:** Double-click or open `claude-archive-viewer.html` in any browser. Drag and drop your exported zip or json archive.
 
-### 2. ⬡ [SVG Colour Inverter](./SVG-Colour-Inverter)
-- **Path:** [`SVG-Colour-Inverter/SVG-Color-Inverter.html`](./SVG-Colour-Inverter/SVG-Color-Inverter.html)
+### 2. ⬡ [SVG Colour Inverter](./SVG%20Colour%20Inverter)
+- **Path:** [`SVG Colour Inverter/SVG-Color-Inverter.html`](./SVG%20Colour%20Inverter/SVG-Color-Inverter.html)
 - **What it does:** Inverts color tokens across presentations attributes, inline styles, and embedded `<style>` tags while preserving element tags, structure, and attributes intact.
 - **How to run:** Open `SVG-Color-Inverter.html` in any modern web browser, drop an SVG file, and export the inverted file.
 
-### 3. 🔲 [Image Corner Rounder](./Image-Corner-Rounder)
-- **Path:** [`Image-Corner-Rounder/Corner-Rounder.html`](./Image-Corner-Rounder/Corner-Rounder.html)
+### 3. 🔲 [Image Corner Rounder](./Image%20Corner%20Rounder)
+- **Path:** [`Image Corner Rounder/Corner-Rounder.html`](./Image%20Corner%20Rounder/Corner-Rounder.html)
 - **What it does:** Rounds image corners with real-time sliders and presets (Soft, Round, Puffy, Circle). Supports PNG, JPG, WEBP, and GIF batch processing.
 - **How to run:** Open `Corner-Rounder.html` in your browser. Drag and drop single or multiple images, adjust corner radius, and download individual files or a batch.
 
-### 4. 📁 [Check Max File Size](./Check-Max-File-Size)
-- **Path:** [`Check-Max-File-Size/Check Max File Size.cmd`](./Check-Max-File-Size/Check%20Max%20File%20Size.cmd)
+### 4. 📁 [Check Max File Size](./Check%20Max%20File%20Size)
+- **Path:** [`Check Max File Size/Check Max File Size.cmd`](./Check%20Max%20File%20Size/Check%20Max%20File%20Size.cmd)
 - **What it does:** Quickly finds the single largest file within any target folder (and its nested subfolders) on Windows without needing PowerShell or third-party tools.
 - **How to run:** Double-click `Check Max File Size.cmd` or run in Command Prompt:
   ```cmd
@@ -59,8 +59,8 @@
   ```
   Enter the path to scan when prompted.
 
-### 5. 🪟 [Electron Win11 Snap Overlay](./Electron-Win11-Snap-Overlay)
-- **Path:** [`Electron-Win11-Snap-Overlay/`](./Electron-Win11-Snap-Overlay)
+### 5. 🪟 [Electron Win11 Snap Overlay](./Electron%20Win11%20Snap%20Overlay)
+- **Path:** [`Electron Win11 Snap Overlay/`](./Electron%20Win11%20Snap%20Overlay)
 - **NPM Package:** [`electron-win11-snap-overlay`](https://www.npmjs.com/package/electron-win11-snap-overlay)
 - **GitHub Repository:** [`Tijil-Das/Electron-Win11-Snap-Overlay`](https://github.com/Tijil-Das/Electron-Win11-Snap-Overlay)
 - **What it does:** Solves the long-standing Electron issue where frameless windows (`titleBarStyle: 'hidden'`) break Windows 11 Snap Layout flyouts because HTML caption buttons never receive OS non-client hit tests. Creates a transparent child HWND over the maximize button that returns `HTMAXBUTTON` on `WM_NCHITTEST` and forwards `WM_NCMOUSEMOVE` to DWM, seamlessly activating native snap layouts while gracefully degrading on Windows 10, macOS, and Linux.
@@ -76,33 +76,33 @@
   SnapController.getOrCreate(win)
   ```
 
-### 6. 🤖 [CS Exhibition — Robotics & Embedded Systems](./CS-Exhibition)
-- **Path:** [`CS-Exhibition/README.md`](./CS-Exhibition/README.md)
+### 6. 🤖 [CS Exhibition — Robotics & Embedded Systems](./CS%20Exhibition)
+- **Path:** [`CS Exhibition/README.md`](./CS%20Exhibition/README.md)
 - **What it does:** Complete, exhibition-grade robotics and embedded systems projects developed under the CISCE & IIT Delhi (IHFC) Teachers Readiness Programme.
   - **Obstacle Avoidance Robot:** Autonomous wheeled robot powered by an Arduino Uno R3, HC-SR04 ultrasonic sensor, SG90 servo scanning neck, and L298N dual H-bridge motor driver with forward clearance detection and dynamic turn logic.
   - **Traffic Light System:** Real-world three-phase traffic controller simulation (Red, Yellow, Green) with realistic state intervals.
 - **What's included:** Full step-by-step documentation (`Content.md`), upload-ready Arduino sketches (`.ino`), and high-resolution wiring schematics (`Wiring.png`).
-- **How to explore:** Start in [`CS-Exhibition/README.md`](./CS-Exhibition/README.md) or open sketches directly in the Arduino IDE.
+- **How to explore:** Start in [`CS Exhibition/README.md`](./CS%20Exhibition/README.md) or open sketches directly in the Arduino IDE.
 
-### 7. 🧠 [My Dev Learnings](./My-Dev-Learnings)
-- **Path:** [`My-Dev-Learnings/README.md`](./My-Dev-Learnings/README.md)
+### 7. 🧠 [My Dev Learnings](./My%20Dev%20Learnings)
+- **Path:** [`My Dev Learnings/README.md`](./My%20Dev%20Learnings/README.md)
 - **What it does:** A personal engineering repository documenting solutions, debugging steps, and architecture decisions encountered across projects (Win11 snap layouts, OAuth sign-in, COM object memory leaks, etc.).
-- **How to explore:** Start at [`My-Dev-Learnings/START-HERE.md`](./My-Dev-Learnings/START-HERE.md) or scan [`My-Dev-Learnings/INDEX.md`](./My-Dev-Learnings/INDEX.md).
+- **How to explore:** Start at [`My Dev Learnings/START-HERE.md`](./My%20Dev%20Learnings/START-HERE.md) or scan [`My Dev Learnings/INDEX.md`](./My%20Dev%20Learnings/INDEX.md).
 
-### 8. 📱 [QR Code Generator](./QR-Code-Generator)
-- **Path:** [`QR-Code-Generator/qr_generator.py`](./QR-Code-Generator/qr_generator.py) | [`QR-Code-Generator/generate-qr.cmd`](./QR-Code-Generator/generate-qr.cmd)
+### 8. 📱 [QR Code Generator](./QR%20Code%20Generator)
+- **Path:** [`QR Code Generator/qr_generator.py`](./QR%20Code%20Generator/qr_generator.py) | [`QR Code Generator/generate-qr.cmd`](./QR%20Code%20Generator/generate-qr.cmd)
 - **What it does:** Generates production-ready QR codes from arbitrary text or URL strings, simultaneously exporting both an infinitely scalable vector `.svg` and an ultra-sharp, high-resolution (300 DPI) `.jpg`. Strictly saves output files in its own directory.
 - **How to run:** Double-click `generate-qr.cmd` or run in terminal:
   ```bash
-  python QR-Code-Generator/qr_generator.py
+  python "QR Code Generator/qr_generator.py"
   ```
   Enter your text when prompted, or pass arguments directly:
   ```bash
-  python QR-Code-Generator/qr_generator.py "https://example.com" -o my_qr
+  python "QR Code Generator/qr_generator.py" "https://example.com" -o my_qr
   ```
 
-### 9. 🖼️ [Batch Image Processor](./Batch-Image-Processor)
-- **Path:** [`Batch-Image-Processor/batch-image-processor-v2.html`](./Batch-Image-Processor/batch-image-processor-v2.html) | [`Batch-Image-Processor/batch-image-processor.html`](./Batch-Image-Processor/batch-image-processor.html)
+### 9. 🖼️ [Batch Image Processor](./Batch%20Image%20Processor)
+- **Path:** [`Batch Image Processor/batch-image-processor-v2.html`](./Batch%20Image%20Processor/batch-image-processor-v2.html) | [`Batch Image Processor/batch-image-processor.html`](./Batch%20Image%20Processor/batch-image-processor.html)
 - **What it does:** High-performance, client-side batch image processor supporting bulk file and entire folder imports. Provides fine-grained color adjustment (hue rotate, saturation, tint), tone grading (brightness, contrast, exposure), artistic effects (blur, sharpen, vignette, noise), instant transforms (grayscale, invert, sepia, rotate 90°, flip), and constraint-based resizing (fit width, height, or bounding box). Exports individually or bundled as a `.zip` archive across WebP, JPEG, and PNG formats.
 - **How to run:** Open `batch-image-processor-v2.html` (split-screen workspace) or `batch-image-processor.html` (classic flow) in any browser. Drag and drop images or select a folder to begin editing.
 

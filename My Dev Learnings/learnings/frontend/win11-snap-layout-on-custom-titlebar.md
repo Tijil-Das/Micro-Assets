@@ -370,7 +370,7 @@ export function useSnapOverlay(buttonRef, maximized) {
 ## Connections
 
 - [`learnings/backend/office-to-pdf-com-cloudflare-pipeline.md`](../backend/office-to-pdf-com-cloudflare-pipeline.md) — another example of bridging a native OS API from a web-stack app
-- Reusable package: [`Electron-Win11-Snap-Overlay`](../../../Electron-Win11-Snap-Overlay/README.md) — extracted, standalone implementation of this pattern
+- Reusable package: [`electron-win11-snap-overlay`](../../../Electron%20Win11%20Snap%20Overlay/README.md) — extracted, standalone implementation of this pattern
 
 ---
 

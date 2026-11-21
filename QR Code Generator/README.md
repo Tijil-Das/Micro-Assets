@@ -42,15 +42,15 @@ Output filename [press Enter for 'qrcode']: my_qr
 [*] Generating QR code...
 
 [+] Successfully generated QR assets in directory:
-    Directory : T:\Coding\Micro Assets\QR-Code-Generator
+    Directory : T:\Coding\Micro Assets\QR Code Generator
 
     1. Vector SVG   : my_qr.svg
-       - Path       : T:\Coding\Micro Assets\QR-Code-Generator\my_qr.svg
+       - Path       : T:\Coding\Micro Assets\QR Code Generator\my_qr.svg
        - Type       : Scalable Vector Graphics (Infinite Resolution)
        - Size       : 13.4 KB
 
     2. High-Res JPG : my_qr.jpg
-       - Path       : T:\Coding\Micro Assets\QR-Code-Generator\my_qr.jpg
+       - Path       : T:\Coding\Micro Assets\QR Code Generator\my_qr.jpg
        - Resolution : 2700 x 2700 px @ 300 DPI (Print Ready)
        - Quality    : 95% JPEG (4:4:4 Chroma)
        - Size       : 285.6 KB
