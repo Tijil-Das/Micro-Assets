@@ -6,11 +6,11 @@ A lightweight Windows batch script that finds and displays the largest file in a
 
 ## Usage
 
-1. **Download** `max_file_size.cmd`
+1. **Download** or locate `Check Max File Size.cmd`
 2. **Double-click** to run, or launch it from the terminal:
 
 ```cmd
-max_file_size.cmd
+"Check Max File Size.cmd"
 ```
 
 3. **Enter a directory path** when prompted:

@@ -6,8 +6,8 @@
 - **Instructors:**  
   - Dr. Venkat Bokka, IHFC ([venkat@ihfc.co.in](mailto:venkat@ihfc.co.in))  
   - Ms. Mrinmoyee Choudhuri, IHFC ([mrinmoyee@ihfc.co.in](mailto:mrinmoyee@ihfc.co.in))  
-- **Source Code Sketch:** [`Obstacle Avoidance Robot.ino`](./Obstacle%20Avoidance%20Robot.ino)  
-- **Circuit Diagram:** [`Wiring.png`](./Wiring.png)  
+- **Source Code Sketch:** [`Obstacle Avoidance Robot.ino`](../../Obstacle%20Avoidance%20Robot.ino)  
+- **Circuit Diagram:** [`Wiring.png`](../../Wiring.png)  
 
 ---
 
@@ -89,9 +89,9 @@ The objective of this project is to build an obstacle-avoiding robot using an Ar
 
 The complete circuit connects the Arduino Uno R3, HC-SR04 ultrasonic sensor, servo motor, L298N motor driver, geared motors, and battery.
 
-[![Obstacle Avoidance Robot Circuit Diagram](./Wiring.png)](./Wiring.png)
+[![Obstacle Avoidance Robot Circuit Diagram](../../Wiring.png)](../../Wiring.png)
 
-> **Direct Link:** [Open `Wiring.png` in full resolution](./Wiring.png)
+> **Direct Link:** [Open `Wiring.png` in full resolution](../../Wiring.png)
 
 ### Pin Connection Summary
 
@@ -135,7 +135,7 @@ flowchart TD
 
 ## 6. Arduino Code
 
-The standalone sketch file is available at [`Obstacle Avoidance Robot.ino`](./Obstacle%20Avoidance%20Robot.ino).
+The standalone sketch file is available at [`Obstacle Avoidance Robot.ino`](../../Obstacle%20Avoidance%20Robot.ino).
 
 ```cpp
 #include <Servo.h>

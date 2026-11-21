@@ -27,6 +27,7 @@
 | [**`CS-Exhibition/`**](./CS-Exhibition) | Robotics & Hardware | Standalone Arduino robotics projects (Obstacle Avoidance Robot, Traffic Light System) with diagrams, schematics, and sketches. | Arduino (C++), HC-SR04, L298N, SG90 Servo, LEDs |
 | [**`QR-Code-Generator/`**](./QR-Code-Generator) | CLI Utility | High-resolution QR code generator outputting vector SVG and 300 DPI JPG directly to disk. | Python 3, Pillow, qrcode |
 | [**`Batch-Image-Processor/`**](./Batch-Image-Processor) | Web Tool | Multi-file and folder batch image processor for color grading, tone adjustment, effects, resizing, and zip export. | HTML5, Canvas API, JSZip |
+| [**`SVGs/`**](./SVGs) | Vector Assets & Tool | Collection of clean UI vector icons, circuit wiring schematics, and interactive Wireboard canvas tools. | SVG, HTML5, Canvas |
 | [**`Skills/`**](./Skills) | Skills & Guidelines | Codified design standards, anti-pattern rules ("AI tells"), token systems, and interaction guidelines for AI agents. | Markdown, Design Standards |
 | [**`My-Dev-Learnings/`**](./My-Dev-Learnings) | Knowledge Base | Structured engineering journal covering real-world mistakes, authentication traps, and patterns. | Markdown, Knowledge Base |
 
@@ -109,6 +110,11 @@
 - **Path:** [`Skills/README.md`](./Skills/README.md) | [`Skills/Website Design.md`](./Skills/Website%20Design.md)
 - **What it does:** Codified engineering standards, UI/UX guidelines, and strict behavioral rules for AI agents. Features comprehensive website design rules designed to eliminate typical "AI tells" (neon glows, purple gradients, identical cards, generic typography) through disciplined design system tokens, typography scales, layout rhythm, and pre-flight checklists.
 - **How to explore:** Start at [`Skills/README.md`](./Skills/README.md) or read the rules directly in [`Skills/Website Design.md`](./Skills/Website%20Design.md).
+
+### 11. 📐 [SVGs & Wireboard](./SVGs)
+- **Path:** [`SVGs/README.md`](./SVGs/README.md) | [`SVGs/wireboardv2.html`](./SVGs/wireboardv2.html)
+- **What it does:** Curated repository of lightweight UI vector icons, circuit wiring schematics, and **Wireboard** — an interactive in-browser circuit wiring and schematic design tool with drag-and-drop components and dynamic spline routing.
+- **How to run:** Open `wireboardv2.html` or `wireboard.html` in any web browser to design or preview circuits, or embed the SVG vector assets directly in web applications.
 
 ---
 
