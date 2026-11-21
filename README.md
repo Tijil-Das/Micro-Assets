@@ -11,7 +11,7 @@
 
 ## 🎯 Overview
 
-**Micro-Assets** brings together focused, zero-bloat utilities designed to do one job cleanly, reliably, and with maximum privacy. The browser tools run entirely on client-side Web APIs (no server tracking, no network calls, no telemetry), the terminal scripts run natively without third-party runtimes, the native desktop addons bridge specialized OS-level capabilities into Electron, the hardware exhibitions demonstrate embedded robotics and circuit designs, and the dev knowledge base documents real-world architectural learnings and patterns.
+**Micro-Assets** brings together focused, zero-bloat utilities designed to do one job cleanly, reliably, and with maximum privacy. The browser tools run entirely on client-side Web APIs (no server tracking, no network calls, no telemetry), the terminal scripts run natively without third-party runtimes, the native desktop addons bridge specialized OS-level capabilities into Electron, the hardware exhibitions demonstrate embedded robotics and circuit designs, the dev knowledge base documents real-world architectural learnings and patterns, and the skills directory provides codified design standards and anti-pattern rules for AI agents.
 
 ---
 
@@ -27,6 +27,7 @@
 | [**`CS-Exhibition/`**](./CS-Exhibition) | Robotics & Hardware | Standalone Arduino robotics projects (Obstacle Avoidance Robot, Traffic Light System) with diagrams, schematics, and sketches. | Arduino (C++), HC-SR04, L298N, SG90 Servo, LEDs |
 | [**`QR-Code-Generator/`**](./QR-Code-Generator) | CLI Utility | High-resolution QR code generator outputting vector SVG and 300 DPI JPG directly to disk. | Python 3, Pillow, qrcode |
 | [**`Batch-Image-Processor/`**](./Batch-Image-Processor) | Web Tool | Multi-file and folder batch image processor for color grading, tone adjustment, effects, resizing, and zip export. | HTML5, Canvas API, JSZip |
+| [**`Skills/`**](./Skills) | Skills & Guidelines | Codified design standards, anti-pattern rules ("AI tells"), token systems, and interaction guidelines for AI agents. | Markdown, Design Standards |
 | [**`My-Dev-Learnings/`**](./My-Dev-Learnings) | Knowledge Base | Structured engineering journal covering real-world mistakes, authentication traps, and patterns. | Markdown, Knowledge Base |
 
 ---
@@ -103,6 +104,11 @@
 - **Path:** [`Batch-Image-Processor/batch-image-processor-v2.html`](./Batch-Image-Processor/batch-image-processor-v2.html) | [`Batch-Image-Processor/batch-image-processor.html`](./Batch-Image-Processor/batch-image-processor.html)
 - **What it does:** High-performance, client-side batch image processor supporting bulk file and entire folder imports. Provides fine-grained color adjustment (hue rotate, saturation, tint), tone grading (brightness, contrast, exposure), artistic effects (blur, sharpen, vignette, noise), instant transforms (grayscale, invert, sepia, rotate 90°, flip), and constraint-based resizing (fit width, height, or bounding box). Exports individually or bundled as a `.zip` archive across WebP, JPEG, and PNG formats.
 - **How to run:** Open `batch-image-processor-v2.html` (split-screen workspace) or `batch-image-processor.html` (classic flow) in any browser. Drag and drop images or select a folder to begin editing.
+
+### 10. ⚡ [Skills](./Skills)
+- **Path:** [`Skills/README.md`](./Skills/README.md) | [`Skills/Website Design.md`](./Skills/Website%20Design.md)
+- **What it does:** Codified engineering standards, UI/UX guidelines, and strict behavioral rules for AI agents. Features comprehensive website design rules designed to eliminate typical "AI tells" (neon glows, purple gradients, identical cards, generic typography) through disciplined design system tokens, typography scales, layout rhythm, and pre-flight checklists.
+- **How to explore:** Start at [`Skills/README.md`](./Skills/README.md) or read the rules directly in [`Skills/Website Design.md`](./Skills/Website%20Design.md).
 
 ---
 
