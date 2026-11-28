@@ -107,9 +107,9 @@
 - **How to run:** Open `batch-image-processor-v2.html` (split-screen workspace) or `batch-image-processor.html` (classic flow) in any browser. Drag and drop images or select a folder to begin editing.
 
 ### 10. ⚡ [Skills](./Skills)
-- **Path:** [`Skills/README.md`](./Skills/README.md) | [`Skills/Website Design.md`](./Skills/Website%20Design.md)
-- **What it does:** Codified engineering standards, UI/UX guidelines, and strict behavioral rules for AI agents. Features comprehensive website design rules designed to eliminate typical "AI tells" (neon glows, purple gradients, identical cards, generic typography) through disciplined design system tokens, typography scales, layout rhythm, and pre-flight checklists.
-- **How to explore:** Start at [`Skills/README.md`](./Skills/README.md) or read the rules directly in [`Skills/Website Design.md`](./Skills/Website%20Design.md).
+- **Path:** [`Skills/README.md`](./Skills/README.md) | [`Skills/Website Design.md`](./Skills/Website%20Design.md) | [`Skills/Mobile App UI Rules.md`](./Skills/Mobile%20App%20UI%20Rules.md)
+- **What it does:** Codified engineering standards, UI/UX guidelines, and strict behavioral rules for AI agents. Features comprehensive web and mobile app design rules designed to eliminate typical "AI tells" (neon glows, purple gradients, card-in-card, emoji chrome, generic typography) through disciplined design system tokens, typography scales, layout rhythm, accessibility standards, and pre-delivery checklists.
+- **How to explore:** Start at [`Skills/README.md`](./Skills/README.md) or read the rules directly in [`Skills/Website Design.md`](./Skills/Website%20Design.md) and [`Skills/Mobile App UI Rules.md`](./Skills/Mobile%20App%20UI%20Rules.md).
 
 ### 11. 📐 [SVGs & Wireboard](./SVGs)
 - **Path:** [`SVGs/README.md`](./SVGs/README.md) | [`SVGs/wireboardv2.html`](./SVGs/wireboardv2.html)
